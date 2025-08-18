@@ -1,0 +1,61 @@
+# ---- Python derleme çıktıları ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---- Sanal ortamlar ----
+.venv/
+venv/
+.env/
+.envrc
+
+# ---- Paketleme / dağıtım ----
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ---- IDE / Editör ----
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ---- Log / Geçici ----
+*.log
+logs/
+.tmp/
+.DS_Store
+Thumbs.db
+
+# ---- Python araçları ----
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ---- Cache / Checkpoint ----
+checkpoints/
+*.ckpt
+
+# ---- Local config / secrets ----
+.env.local
+.env.*.local
+secret_*.json
+secrets.json
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
+
+# ---- Output / Artifacts ----
+outputs/
+artifacts/
+
+# ---- Generated memory files ----
+*.jsonl
+memory.json
+
+# ---- Misc ----
+*.bak
+*.orig
