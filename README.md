@@ -1,7 +1,68 @@
 # LangGraph Örnekleri (Türkçe)
 
-Bu depo; yerel / OpenAI-uyumlu bir sohbet modeli ile LangGraph kullanımını gösteren birkaç bağımsız Python betiği içerir.
 
+
+---
+
+## Diyagramlar
+
+### 1. Temel Akış (`langraph_basic.py`)
+
+```mermaid
+flowchart LR
+	U[👤 Kullanıcı Mesajı] --> |messages| LLM[🤖 llm_node]
+	LLM --> C{"done" içeriyor mu?}
+	C -- Hayır --> LLM
+	C -- Evet veya MAX_TURN --> E[🏁 Son]
+```
+
+### 2. Thread / Hafıza (`langraph_stream_memory.py`)
+
+```mermaid
+flowchart TB
+	subgraph T1[Thread 1 (thread_id=1)]
+		U1["Mesaj: 'Adım Will'"] --> G1[Graph]
+		G1 --> M1[(InMemorySaver)]
+		M1 --> Q1[Yanıt 1]
+		Q1 --> U1b["Mesaj: 'Adımı hatırlıyor musun?' "] --> G1
+	end
+	subgraph T2[Thread 2 (thread_id=2)]
+		U2["Mesaj: 'Adımı hatırlıyor musun?' "] --> G2[Graph]
+		G2 --> M2[(InMemorySaver – farklı anahtar)]
+		M2 --> Q2[Yanıt 2]
+	end
+	style M1 fill:#f6f6ff,stroke:#555
+	style M2 fill:#f6f6ff,stroke:#555
+```
+
+### 3. Persona Branching (`langraph_branch_personas.py`)
+
+```mermaid
+flowchart LR
+	P[Prompt] --> F1[Persona: sıcak]
+	P --> F2[Persona: resmi]
+	P --> F3[Persona: eğitmen]
+	P --> F4[Persona: şüpheci]
+	F1 --> R1[Yanıt 1]
+	F2 --> R2[Yanıt 2]
+	F3 --> R3[Yanıt 3]
+	F4 --> R4[Yanıt 4]
+	R1 & R2 & R3 & R4 --> COL[Karşılaştırma / Özet Tablo]
+	COL --> DIFF[Diff Görselleştirme (unified / side / words)]
+```
+
+### 4. Dinamik Sıcaklık (`langraph_dynamic_temperature.py`)
+
+```mermaid
+flowchart LR
+	PR[Prompt] --> CL[Heuristik Sınıflandırma]\n(kategori + temperature)
+	CL --> |dinamik sıcaklık| LDM[LLM Çağrısı]
+	PR --> |isteğe bağlı| FIX[LLM (Sabit temperature)]
+	LDM --> CMP[Karşılaştırma]
+	FIX --> CMP
+```
+
+Not: Diyagramlar Mermaid desteklemeyen ortamlarda düz metin olarak görünebilir.
 Betikler:
 
 1. `langraph_basic.py` – Temel akış: kullanıcı mesajı → LLM → döngü ("done" geçerse durur).
