@@ -1,10 +1,19 @@
-Langraph agent demo
+# LangGraph Örnekleri (Türkçe)
 
-This small script runs a LangGraph StateGraph that calls a local OpenAI-compatible LLM (LM Studio, LM Deploy, etc.).
+Bu depo; yerel / OpenAI-uyumlu bir sohbet modeli ile LangGraph kullanımını gösteren birkaç bağımsız Python betiği içerir.
 
-Quick start (Windows cmd.exe)
+Betikler:
 
-Set environment variables if you need a custom endpoint or model:
+1. `langraph_basic.py` – Temel akış: kullanıcı mesajı → LLM → döngü ("done" geçerse durur).
+2. `langraph_stream_memory.py` – `InMemorySaver` ile thread tabanlı hafıza (farklı `thread_id` = ayrı geçmiş).
+3. `langraph_branch_personas.py` – Aynı prompt'u farklı persona'larla paralel çalıştırıp sonuçları renkli diff / yan yana / kelime farkı ile karşılaştırma.
+4. `langraph_dynamic_temperature.py` – Prompt türünü sınıflandırıp sıcaklığı (temperature) otomatik seçer; isteğe bağlı sabit sıcaklık karşılaştırması.
+
+---
+
+## Hızlı Başlangıç (Windows cmd.exe)
+
+Sanal ortamını (ör. `.venv`) aktifleştir ve gerekli ortam değişkenlerini ayarla (gerekirse):
 
 ```cmd
 set LG_BASE_URL=http://127.0.0.1:1234/v1
@@ -12,68 +21,115 @@ set LG_API_KEY=lm-studio
 set LG_MODEL=google/gemma-3n-e4b
 ```
 
-Activate your venv and run:
+Gerekli paketler:
 
 ```cmd
-python langraph_app.py
+pip install -r requirements.txt
 ```
 
-Features added:
-- Configurable via env vars
-- Retry on transient network errors
-- Proper role mapping for messages (user/assistant/system)
-- Max-turn guard to avoid infinite loops
-- Logging for easier debugging
+Temel örneği çalıştır:
 
-### In-memory checkpoint / thread demo
+```cmd
+python langraph_basic.py
+```
 
-`langraph_stream_memory.py` shows how to use `InMemorySaver` so each `thread_id` keeps an isolated conversation. Run it:
+Özellikler (genel):
+
+- Ortam değişkeni ile yapılandırma (model, base URL, API key).
+- Geçici bağlantı hatalarına yeniden deneme (retry).
+- Mesaj rolleri doğru eşleme (user / assistant / system / tool).
+- Maksimum tur sınırı (sonsuz döngü engeli).
+- Günlük (logging) ile izlenebilirlik.
+
+---
+
+## Thread / Hafıza Örneği
+
+Betik: `langraph_stream_memory.py`
+
+Amaç: Aynı uygulamada farklı oturumları (thread) izole etmek. `thread_id=1` kullanıcının ismini hatırlar, `thread_id=2` temiz başlar.
+
+Çalıştır:
 
 ```cmd
 python langraph_stream_memory.py
 ```
 
-It will:
- 
-1. Start thread 1, introduce a name.
-2. Ask if the model remembers the name (same thread, history present).
-3. Ask the same question in thread 2 (fresh history) to contrast behavior.
+---
 
+## Persona Branching (Karşılaştırmalı) Örneği
 
-Adjust environment variables (`LG_BASE_URL`, `LG_MODEL`, etc.) as in the basic example if needed.
+Betik: `langraph_branch_personas.py`
 
-### Persona Branching Demo
+Ne yapar: Tek bir prompt'u tanımlı personelere paralel yollayıp çıktıların:
 
-`langraph_branch_personas.py` aynı prompt'u farklı persona (system mesajı) ile paralel thread'lerde çalıştırır ve cevapları karşılaştırmalı diff ile gösterir.
+- Bir özet tablosunu
+- Seçilen moda göre farklarını
 
-Çalıştır:
+gösterir.
 
+Diff modları ( `--diff-mode` ):
+
+- `unified` : Klasik satır bazlı (eklenen yeşil, silinen kırmızı)
+- `side`    : Yan yana satırlar
+- `words`   : Kelime düzeyinde eklenen / silinen
+- `all`     : Hepsi birden
+
+Diğer bayraklar:
+
+- `--no-diff` : Farkları gösterme (sadece özet tablo)
+- `--strict-turkish` : İngilizce sızıntısı varsa uyarı
+- `--max-preview-chars N` : Özet tablo kesme uzunluğu
+
+Örnek:
 ```cmd
-python langraph_branch_personas.py --prompt "Kısa bir motivasyon cümlesi yaz" --temperature 0.7
+python langraph_branch_personas.py --prompt "Kısa bir motivasyon cümlesi yaz" --diff-mode side --strict-turkish
 ```
 
-Persona listesini görmek için:
+Persona kimlikleri (Türkçe üretim): `sicak`, `resmi`, `egitmen`, `supheci`.
 
-```cmd
-python langraph_branch_personas.py --list-personas
-```
+---
 
-Örnek personelar: friendly, formal, teacher, skeptic.
+## Dinamik Sıcaklık (Temperature) Örneği
 
-### Dinamik Sıcaklık (Temperature) Demo
+Betik: `langraph_dynamic_temperature.py`
 
-`langraph_dynamic_temperature.py` prompt türünü basit kurallarla sınıflandırıp modele gönderilen `temperature` değerini otomatik seçer.
+Mantık: Prompt içeriğini heuristiklerle sınıflandırır:
 
-Çalıştırma örneği:
+- çeviri / yaratıcı / akıl yürütme / kod / faktüel / genel
+
+ve buna göre bir sıcaklık seçer. İstersen sabit sıcaklıkla karşılaştırma yapar.
+
+Örnek:
 
 ```cmd
 python langraph_dynamic_temperature.py --prompt "Kısa bir motivasyon cümlesi yaz" --show-rationale --compare
 ```
 
-Parametreler:
+Bayraklar:
 
-- `--show-rationale` sınıflandırma gerekçesini yazdırır.
-- `--compare` dinamik ve sabit sıcaklık çıktısını yan yana gösterir.
-- `--fixed-temperature 0.7` sabit referans sıcaklık.
+- `--show-rationale` : Sınıflandırma gerekçesini yazdır
+- `--compare` : Dinamik vs sabit çıktı
+- `--fixed-temperature 0.7` : Karşılaştırma için sabit değer
 
-If you don't have a local LLM, point `LG_BASE_URL` to a reachable OpenAI-compatible server and set `LG_API_KEY` appropriately.
+---
+
+## Yerel Modeliniz Yoksa
+
+`LG_BASE_URL` değerini erişilebilir bir OpenAI-uyumlu son noktaya yönlendirin (ör. bir bulut servis ya da LM Studio). `LG_API_KEY` değerini de o servisin anahtarıyla değiştirin.
+
+---
+
+## Önerilen Geliştirmeler
+
+- Kalıcı hafıza (SQLite / dosya) ekleme
+- Vektör hafıza & özetleme
+- JSON/CSV çıktı loglama
+- FastAPI arayüzü
+- Persona tanımlarını harici YAML'den yükleme
+
+Katkı / sorular için: dosyaları inceleyip küçük PR'lar açabilirsiniz.
+
+---
+
+Tüm komutlar Windows `cmd.exe` içindir; PowerShell kullanıyorsanız `set` yerine `$env:DEGISKEN="deger"` biçimine uyarlayın.
