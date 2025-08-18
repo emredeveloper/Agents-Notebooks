@@ -10,55 +10,53 @@
 
 ```mermaid
 flowchart LR
-	U[👤 Kullanıcı Mesajı] --> |messages| LLM[🤖 llm_node]
-	LLM --> C{"done" içeriyor mu?}
+	U[Mesaj] --> LLM[llm_node]
+	LLM --> C{done var mı?}
 	C -- Hayır --> LLM
-	C -- Evet veya MAX_TURN --> E[🏁 Son]
+	C -- Evet / MAX_TURN --> E[Son]
 ```
 
 ### 2. Thread / Hafıza (`langraph_stream_memory.py`)
 
 ```mermaid
 flowchart TB
-	subgraph T1[Thread 1 (thread_id=1)]
-		U1["Mesaj: 'Adım Will'"] --> G1[Graph]
-		G1 --> M1[(InMemorySaver)]
-		M1 --> Q1[Yanıt 1]
-		Q1 --> U1b["Mesaj: 'Adımı hatırlıyor musun?' "] --> G1
+	subgraph T1[Thread 1]
+		Name['Adım Will'] --> G1[Graph]
+		G1 --> M1[(Memory)]
+		M1 --> A1[Yanıt 1]
+		A1 --> Recall['Adımı hatırlıyor musun?'] --> G1
 	end
-	subgraph T2[Thread 2 (thread_id=2)]
-		U2["Mesaj: 'Adımı hatırlıyor musun?' "] --> G2[Graph]
-		G2 --> M2[(InMemorySaver – farklı anahtar)]
-		M2 --> Q2[Yanıt 2]
+	subgraph T2[Thread 2]
+		Recall2['Adımı hatırlıyor musun?'] --> G2[Graph]
+		G2 --> M2[(Memory)]
+		M2 --> A2[Yanıt 2]
 	end
-	style M1 fill:#f6f6ff,stroke:#555
-	style M2 fill:#f6f6ff,stroke:#555
 ```
 
 ### 3. Persona Branching (`langraph_branch_personas.py`)
 
 ```mermaid
 flowchart LR
-	P[Prompt] --> F1[Persona: sıcak]
-	P --> F2[Persona: resmi]
-	P --> F3[Persona: eğitmen]
-	P --> F4[Persona: şüpheci]
+	P[Prompt] --> F1[Persona sicak]
+	P --> F2[Persona resmi]
+	P --> F3[Persona egitmen]
+	P --> F4[Persona supheci]
 	F1 --> R1[Yanıt 1]
 	F2 --> R2[Yanıt 2]
 	F3 --> R3[Yanıt 3]
 	F4 --> R4[Yanıt 4]
-	R1 & R2 & R3 & R4 --> COL[Karşılaştırma / Özet Tablo]
-	COL --> DIFF[Diff Görselleştirme (unified / side / words)]
+	R1 & R2 & R3 & R4 --> COL[Ozet Tablo]
+	COL --> DIFF[Diff (unified/side/words)]
 ```
 
 ### 4. Dinamik Sıcaklık (`langraph_dynamic_temperature.py`)
 
 ```mermaid
 flowchart LR
-	PR[Prompt] --> CL[Heuristik Sınıflandırma]\n(kategori + temperature)
-	CL --> |dinamik sıcaklık| LDM[LLM Çağrısı]
-	PR --> |isteğe bağlı| FIX[LLM (Sabit temperature)]
-	LDM --> CMP[Karşılaştırma]
+	P2[Prompt] --> CLS[Heuristik Siniflandirma]
+	CLS --> DYN[LLM dinamik]
+	P2 --> FIX[LLM sabit]
+	DYN --> CMP[Karsilastirma]
 	FIX --> CMP
 ```
 
