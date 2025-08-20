@@ -1,6 +1,32 @@
-# LangGraph Örnekleri (Türkçe)
+# 🤖 AI Agents & LangGraph Projeleri (Türkçe)
 
-Bu proje, LangGraph kütüphanesi kullanarak çeşitli AI workflow örneklerini Türkçe olarak sunar.
+Bu repository, modern AI teknolojileri ile geliştirilmiş çeşitli agent sistemleri ve LangGraph workflow örneklerini Türkçe olarak sunar.
+
+## 🎥 **Ana Proje: YouTube Video QA Agent**
+
+**En gelişmiş ve güncel proje** - YouTube videolarından transcript çıkarıp akıllı soru-cevap yapabilen modern agent sistemi.
+
+### ✨ **Öne Çıkan Özellikler**
+- 🎬 **YouTube Video İşleme**: Otomatik transcript çıkarma
+- 🧠 **Multi-LLM Support**: LM Studio (yerel) + Google Gemini 2.5
+- 💡 **Ana Fikirler Çıkarımı**: Video'nun 3-5 temel mesajı
+- 🌐 **Modern Streamlit UI**: Web arayüzü + embedded video player
+- 🔍 **Vector Search**: FAISS ile hızlı içerik arama
+- 🇹🇷 **Tam Türkçe Destek**: Arayüz ve çıktılar
+
+### 🚀 **Hızlı Başlangıç**
+```bash
+cd "Youtube Video - RAG - Agent"
+streamlit run streamlit_app.py
+```
+
+📖 **[Detaylı Dokümantasyon →](Youtube%20Video%20-%20RAG%20-%20Agent/README_youtube_qa.md)**
+
+---
+
+## 🔧 **LangGraph Örnekleri**
+
+LangGraph kütüphanesi kullanarak çeşitli AI workflow örnekleri:
 
 ## Diyagramlar
 
@@ -62,17 +88,46 @@ flowchart LR
     FIX --> CMP
 ```
 
-## Betikler Hakkında
+## 📁 **Proje Yapısı**
+
+```
+Agents-Denemeler/
+├── 🎥 Youtube Video - RAG - Agent/     # Ana proje (Streamlit UI)
+│   ├── streamlit_app.py                # Web arayüzü
+│   ├── youtube_qa_agent.py            # Core agent logic
+│   └── README_youtube_qa.md           # Detaylı dokümantasyon
+├── 🔧 Langraph/                        # LangGraph örnekleri
+│   ├── langraph_basic.py              # Temel akış
+│   ├── langraph_stream_memory.py      # Thread tabanlı hafıza
+│   ├── langraph_branch_personas.py    # Persona branching
+│   └── langraph_dynamic_temperature.py # Dinamik sıcaklık
+└── requirements.txt                    # Ortak bağımlılıklar
+```
+
+## 📋 **LangGraph Betikleri Hakkında**
 
 1. **`langraph_basic.py`** – Temel akış: kullanıcı mesajı → LLM → döngü ("done" geçerse durur)
 2. **`langraph_stream_memory.py`** – `InMemorySaver` ile thread tabanlı hafıza (farklı `thread_id` = ayrı geçmiş)
 3. **`langraph_branch_personas.py`** – Aynı prompt'u farklı persona'larla paralel çalıştırıp sonuçları renkli diff / yan yana / kelime farkı ile karşılaştırma
 4. **`langraph_dynamic_temperature.py`** – Prompt türünü sınıflandırıp sıcaklığı (temperature) otomatik seçer; isteğe bağlı sabit sıcaklık karşılaştırması
 
-## Hızlı Başlangıç (Windows cmd.exe)
+## 🚀 **Hızlı Başlangıç**
 
-### Ortam Kurulumu
+### 🎥 **YouTube QA Agent (Ana Proje)**
 
+```bash
+# Ana projeye git
+cd "Youtube Video - RAG - Agent"
+
+# Streamlit uygulamasını başlat
+streamlit run streamlit_app.py
+```
+
+Tarayıcıda `http://localhost:8501` açılır.
+
+### 🔧 **LangGraph Örnekleri (Windows cmd.exe)**
+
+#### Ortam Kurulumu
 Sanal ortamını (örn. `.venv`) aktifleştir ve gerekli ortam değişkenlerini ayarla:
 
 ```cmd
@@ -81,15 +136,14 @@ set LG_API_KEY=lm-studio
 set LG_MODEL=google/gemma-3n-e4b
 ```
 
-### Paket Kurulumu
-
+#### Paket Kurulumu
 ```cmd
 pip install -r requirements.txt
 ```
 
-### Temel Örneği Çalıştırma
-
+#### Temel Örneği Çalıştırma
 ```cmd
+cd Langraph
 python langraph_basic.py
 ```
 
@@ -168,18 +222,56 @@ python langraph_dynamic_temperature.py --prompt "Kısa bir motivasyon cümlesi y
 
 `LG_BASE_URL` değerini erişilebilir bir OpenAI-uyumlu son noktaya yönlendirin (örn. bir bulut servis ya da LM Studio). `LG_API_KEY` değerini de o servisin anahtarıyla değiştirin.
 
-## Önerilen Geliştirmeler
+## 🌟 **Önerilen Geliştirmeler**
 
-- Kalıcı hafıza (SQLite / dosya) ekleme
-- Vektör hafıza & özetleme
-- JSON/CSV çıktı loglama
-- FastAPI arayüzü
-- Persona tanımlarını harici YAML'den yükleme
+### 🎥 **YouTube QA Agent**
+- [x] ✅ **Streamlit UI** - Tamamlandı
+- [x] ✅ **Ana Fikirler Çıkarımı** - Tamamlandı  
+- [x] ✅ **Multi-LLM Support** - Tamamlandı
+- [ ] 🔄 **A2A Protocol Entegrasyonu** - Devam ediyor
+- [ ] 📊 **Video Timeline Navigation**
+- [ ] 📤 **Export Features** (PDF/Word)
+- [ ] 🌍 **Multi-language Support**
 
-## Katkı
+### 🔧 **LangGraph Örnekleri**
+- [ ] 💾 Kalıcı hafıza (SQLite / dosya) ekleme
+- [ ] 🔍 Vektör hafıza & özetleme
+- [ ] 📝 JSON/CSV çıktı loglama
+- [ ] 🚀 FastAPI arayüzü
+- [ ] 📋 Persona tanımlarını harici YAML'den yükleme
 
-Katkı veya sorular için dosyaları inceleyip küçük PR'lar açabilirsiniz.
+## 🤝 **Katkıda Bulunma**
+
+### 🎯 **Nasıl Katkıda Bulunurum?**
+1. **Fork yapın** ve feature branch oluşturun
+2. **Kod değişikliklerinizi** commit edin
+3. **Pull Request** açın
+4. **Issue'lar** açarak özellik önerilerinde bulunun
+
+### 📋 **Katkı Alanları**
+- 🐛 **Bug Fixes**: Hata düzeltmeleri
+- ✨ **New Features**: Yeni özellikler
+- 📚 **Documentation**: Dokümantasyon iyileştirmeleri
+- 🎨 **UI/UX**: Arayüz geliştirmeleri
+- 🧪 **Testing**: Test senaryoları
+
+### 🔧 **Geliştirme Ortamı**
+- **Python 3.8+** gerekli
+- **Virtual environment** kullanımı önerilir
+- **Code formatting**: Black, isort kullanın
 
 ---
 
-**Not:** Tüm komutlar Windows `cmd.exe` içindir. PowerShell kullanıyorsanız `set` yerine `$env:DEGISKEN="deger"` biçimine uyarlayın.
+## 📝 **Notlar**
+
+- **Windows cmd.exe**: `set DEGISKEN="deger"` formatı
+- **PowerShell**: `$env:DEGISKEN="deger"` formatı  
+- **Linux/Mac**: `export DEGISKEN="deger"` formatı
+
+## 🏷️ **Teknoloji Stack**
+
+- **🐍 Backend**: Python, LangGraph, LangChain
+- **🤖 LLM**: LM Studio, Google Gemini, OpenAI
+- **🌐 Frontend**: Streamlit, HTML/CSS
+- **🔍 Vector DB**: FAISS, Chroma
+- **📹 Video**: YouTube Transcript API, PyTube
