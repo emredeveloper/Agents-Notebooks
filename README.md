@@ -101,6 +101,12 @@ Agents-Denemeler/
 │   ├── langraph_stream_memory.py      # Thread tabanlı hafıza
 │   ├── langraph_branch_personas.py    # Persona branching
 │   └── langraph_dynamic_temperature.py # Dinamik sıcaklık
+├── a2a_demo/                           # A2A benzeri çoklu ajan demo (LM Studio destekli)
+│   ├── common.py                       # Ortak yardımcılar (LM Studio çağrısı, JSON-RPC yardımcıları)
+│   ├── math_agent.py                   # Basit matematik ajanı
+│   ├── writer_agent.py                 # LLM tabanlı yazım ajanı (LM Studio)
+│   ├── orchestrator.py                 # Basit orkestratör
+│   └── README.md
 └── requirements.txt                    # Ortak bağımlılıklar
 ```
 
