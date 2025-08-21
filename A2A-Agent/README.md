@@ -44,6 +44,6 @@ curl -s -X POST http://localhost:8100/ -H "Content-Type: application/json" -d '{
 }' | jq
 ```
 
-Not: Bu demo A2A spesine olabildiğince yakın bir yapıda minimaldir ve güvenlik/kimlik doğrulama içermemektedir.
+Not: Bu demo güvenlik/kimlik doğrulama içermemektedir.
 
 
