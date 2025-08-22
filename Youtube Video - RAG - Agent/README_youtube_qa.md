@@ -2,6 +2,28 @@
 
 Modern AI teknolojileri ile YouTube videolarından transcript çıkarıp, video içeriği hakkında akıllı soru-cevap yapmanızı sağlayan gelişmiş agent sistemi. LangGraph workflow'u ve çoklu LLM desteği ile güçlendirilmiştir.
 
+## 📸 Ekran Görüntüleri
+
+<p align="center">
+  <img src="./image.png" alt="Sistem Diyagramı" width="900">
+  <br/>
+  <em>Sistem Diyagramı</em>
+  <br/><br/>
+  <img src="./YouTube-QA-Agent-08-22-2025_01_46_PM.png" alt="Ana Sayfa ve Yapılandırma" width="900">
+  <br/>
+  <em>Ana Sayfa ve Yapılandırma</em>
+  <br/><br/>
+  <img src="./YouTube-QA-Agent-08-22-2025_01_50_PM.png" alt="YouTube URL Girişi ve İşleme" width="900">
+  <br/>
+  <em>YouTube URL Girişi ve İşleme</em>
+  <br/><br/>
+  <img src="./YouTube-QA-Agent-08-22-2025_01_50_PM%20%281%29.png" alt="Soru-Cevap Arayüzü ve Sonuçlar" width="900">
+  <br/>
+  <em>Soru-Cevap Arayüzü ve Sonuçlar</em>
+  <br/>
+
+</p>
+
 ## 🚀 Özellikler
 
 ### 🎯 **Core Features**
@@ -356,3 +378,24 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosy
 - **🎨 UI**: Rich Console (CLI), Custom CSS (Web)
 
 **Not**: Bu sistem eğitim ve araştırma amaçlıdır. Ticari kullanım için YouTube API terms of service'i ve model lisanslarını kontrol edin.
+
+## 📸 Ekran Görüntüleri
+
+<p align="center">
+  <img src="./image.png" alt="Sistem Diyagramı" width="900">
+  <br/>
+  <em>Sistem Diyagramı</em>
+  <br/><br/>
+  <img src="./YouTube-QA-Agent-08-22-2025_01_46_PM.png" alt="Ana Sayfa ve Yapılandırma" width="900">
+  <br/>
+  <em>Ana Sayfa ve Yapılandırma</em>
+  <br/><br/>
+  <img src="./YouTube-QA-Agent-08-22-2025_01_50_PM.png" alt="YouTube URL Girişi ve İşleme" width="900">
+  <br/>
+  <em>YouTube URL Girişi ve İşleme</em>
+  <br/><br/>
+  <img src="./YouTube-QA-Agent-08-22-2025_01_50_PM%20%281%29.png" alt="Soru-Cevap Arayüzü ve Sonuçlar" width="900">
+  <br/>
+  <em>Soru-Cevap Arayüzü ve Sonuçlar</em>
+  <br/>
+</p>

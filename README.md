@@ -2,6 +2,40 @@
 
 Bu repository, modern AI teknolojileri ile geliştirilmiş çeşitli agent sistemleri ve LangGraph workflow örneklerini Türkçe olarak sunar.
 
+## 📸 Ekran Görüntüleri
+
+### 🎥 YouTube QA Agent
+<p align="center">
+  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/image.png" alt="YouTube QA - Sistem Diyagramı" width="900">
+  <br/>
+  <em>Sistem Diyagramı</em>
+  <br/><br/>
+  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_46_PM.png" alt="YouTube QA - Ana Sayfa ve Yapılandırma" width="900">
+  <br/>
+  <em>Ana Sayfa ve Yapılandırma</em>
+  <br/><br/>
+  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_50_PM.png" alt="YouTube QA - URL Girişi ve İşleme" width="900">
+  <br/>
+  <em>YouTube URL Girişi ve İşleme</em>
+  <br/><br/>
+  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_50_PM%20%281%29.png" alt="YouTube QA - Soru Cevap ve Sonuçlar" width="900">
+  <br/>
+  <em>Soru-Cevap Arayüzü ve Sonuçlar</em>
+  <br/>
+</p>
+
+### 🤝 A2A-Agent (Çoklu Ajan Demo)
+<p align="center">
+  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_53_PM.png" alt="A2A-Agent - Ekran 1" width="900"><br/>
+  <em>Ekran 1</em><br/><br/>
+  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_54_PM.png" alt="A2A-Agent - Ekran 2" width="900"><br/>
+  <em>Ekran 2</em><br/><br/>
+  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_54_PM%20%281%29.png" alt="A2A-Agent - Ekran 3" width="900"><br/>
+  <em>Ekran 3</em><br/><br/>
+  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_55_PM.png" alt="A2A-Agent - Ekran 4" width="900"><br/>
+  <em>Ekran 4</em><br/>
+</p>
+
 ## 🎥 **Ana Proje: YouTube Video QA Agent**
 
 **En gelişmiş ve güncel proje** - YouTube videolarından transcript çıkarıp akıllı soru-cevap yapabilen modern agent sistemi.
@@ -21,6 +55,22 @@ streamlit run streamlit_app.py
 ```
 
 📖 **[Detaylı Dokümantasyon →](Youtube%20Video%20-%20RAG%20-%20Agent/README_youtube_qa.md)**
+
+## 🤝 A2A-Agent (Çoklu Ajan Demo)
+
+LM Studio'nun OpenAI uyumlu sunucusunu kullanarak basit bir çoklu ajan (MathAgent, WriterAgent) ve `orchestrator` ile A2A benzeri bir akış sunar.
+
+### 🚀 Hızlı Başlangıç (A2A-Agent)
+```bash
+cd A2A-Agent
+
+# Ayrı terminallerde çalıştırın
+python math_agent.py
+python writer_agent.py
+python orchestrator.py
+```
+
+📖 **[A2A-Agent Dokümantasyonu →](A2A-Agent/README.md)**
 
 ---
 
@@ -92,22 +142,25 @@ flowchart LR
 
 ```
 Agents-Denemeler/
-├── 🎥 Youtube Video - RAG - Agent/     # Ana proje (Streamlit UI)
-│   ├── streamlit_app.py                # Web arayüzü
-│   ├── youtube_qa_agent.py            # Core agent logic
-│   └── README_youtube_qa.md           # Detaylı dokümantasyon
-├── 🔧 Langraph/                        # LangGraph örnekleri
-│   ├── langraph_basic.py              # Temel akış
-│   ├── langraph_stream_memory.py      # Thread tabanlı hafıza
-│   ├── langraph_branch_personas.py    # Persona branching
-│   └── langraph_dynamic_temperature.py # Dinamik sıcaklık
-├── a2a_demo/                           # A2A benzeri çoklu ajan demo (LM Studio destekli)
-│   ├── common.py                       # Ortak yardımcılar (LM Studio çağrısı, JSON-RPC yardımcıları)
-│   ├── math_agent.py                   # Basit matematik ajanı
-│   ├── writer_agent.py                 # LLM tabanlı yazım ajanı (LM Studio)
-│   ├── orchestrator.py                 # Basit orkestratör
-│   └── README.md
-└── requirements.txt                    # Ortak bağımlılıklar
+├── 🎥 Youtube Video - RAG - Agent/      # Ana proje (Streamlit UI)
+│   ├── streamlit_app.py                 # Web arayüzü
+│   ├── youtube_qa_agent.py              # Core agent logic
+│   └── README_youtube_qa.md             # Detaylı dokümantasyon
+├── 🔧 Langraph/                         # LangGraph örnekleri
+│   ├── langraph_basic.py               # Temel akış
+│   ├── langraph_stream_memory.py       # Thread tabanlı hafıza
+│   ├── langraph_branch_personas.py     # Persona branching
+│   └── langraph_dynamic_temperature.py  # Dinamik sıcaklık
+├── A2A-Agent/                           # A2A benzeri çoklu ajan demo (LM Studio destekli)
+│   ├── orchestrator.py                  # Basit orkestratör
+│   ├── math_agent.py                    # Basit matematik ajanı
+│   ├── writer_agent.py                  # Yazım ajanı (LM Studio)
+│   ├── embedding_agent.py               # Embedding yardımcıları
+│   ├── ui_streamlit.py                  # Opsiyonel UI
+│   ├── common.py                        # Ortak yardımcılar (LM Studio, JSON-RPC)
+│   ├── README.md
+│   └── logs/                            # Log dosyaları
+└── requirements.txt                     # Ortak bağımlılıklar
 ```
 
 ## 📋 **LangGraph Betikleri Hakkında**
