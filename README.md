@@ -330,7 +330,7 @@ python langraph_dynamic_temperature.py --prompt "Kısa bir motivasyon cümlesi y
 ## 🏷️ **Teknoloji Stack**
 
 - **🐍 Backend**: Python, LangGraph, LangChain
-- **🤖 LLM**: LM Studio, Google Gemini, OpenAI
+- **🤖 LLM**: LM Studio, Google Gemini
 - **🌐 Frontend**: Streamlit, HTML/CSS
-- **🔍 Vector DB**: FAISS, Chroma
+- **🔍 Vector DB**: FAISS
 - **📹 Video**: YouTube Transcript API, PyTube

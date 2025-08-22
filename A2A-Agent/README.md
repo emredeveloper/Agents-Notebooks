@@ -2,6 +2,18 @@
 
 Bu demo, iki basit ajan (MathAgent, WriterAgent) ve bir Orchestrator ile A2A benzeri uçlar sağlar. LLM yanıtları için LM Studio'nun OpenAI uyumlu yerel sunucusu kullanılır.
 
+## 🚀 Hızlı Başlangıç
+
+```bash
+cd A2A-Agent
+
+# Ayrı terminallerde başlatın
+python math_agent.py
+python writer_agent.py
+python embedding_agent.py
+python orchestrator.py
+```
+
 ## 📸 Ekran Görüntüleri
 
 <p align="center">
@@ -40,15 +52,15 @@ pip install -r requirements.txt
 Üç terminalde:
 
 ```bash
-python a2a_demo/math_agent.py
+python math_agent.py
 ```
 
 ```bash
-python a2a_demo/writer_agent.py
+python writer_agent.py
 ```
 
 ```bash
-python a2a_demo/orchestrator.py
+python orchestrator.py
 ```
 
 Ardından orchestrator'a istek atabilirsiniz:
@@ -67,5 +79,22 @@ curl -s -X POST http://localhost:8100/ -H "Content-Type: application/json" -d '{
 ```
 
 Not: Bu demo güvenlik/kimlik doğrulama içermemektedir.
+
+## 🖥️ Opsiyonel Web UI
+
+Ajanları otomatik başlatan ve test etmenizi sağlayan basit bir UI de mevcuttur:
+
+```bash
+cd A2A-Agent
+streamlit run ui_streamlit.py
+```
+
+Varsayılan portlar:
+- MathAgent: 8001
+- WriterAgent: 8002
+- EmbeddingSearchAgent: 8003
+- Orchestrator: 8100
+
+Not: LM Studio embedding modeli için varsayılan env: `LMSTUDIO_EMBED_MODEL=text-embedding-mxbai-embed-large-v1`.
 
 
