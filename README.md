@@ -58,16 +58,29 @@ streamlit run streamlit_app.py
 
 ## 🤝 A2A-Agent (Çoklu Ajan Demo)
 
-LM Studio'nun OpenAI uyumlu sunucusunu kullanarak basit bir çoklu ajan (MathAgent, WriterAgent) ve `orchestrator` ile A2A benzeri bir akış sunar.
+LM Studio'nun OpenAI uyumlu sunucusunu kullanarak basit bir çoklu ajan (MathAgent, WriterAgent, EmbeddingSearchAgent) ve `orchestrator` ile A2A benzeri bir akış sunar.
+
+### 🆕 **Yeni Agent'lar**
+- **🌐 Translation-Agent**: Türkçe-İngilizce arası çeviri (Port: 8004)
+- **📄 Document-Analysis-Agent**: Metin analizi ve özetleme (Port: 8005)  
+- **🌤️ Weather-Agent**: Hava durumu bilgileri (Port: 8006)
+- **💻 Code-Review-Agent**: Kod analizi ve review (Port: 8007)
 
 ### 🚀 Hızlı Başlangıç (A2A-Agent)
 ```bash
 cd A2A-Agent
 
-# Ayrı terminallerde çalıştırın
-python math_agent.py
-python writer_agent.py
-python orchestrator.py
+# Mevcut agents
+python math_agent.py       # Port: 8001
+python writer_agent.py     # Port: 8002
+python embedding_agent.py  # Port: 8003
+python orchestrator.py     # Port: 8100
+
+# Yeni agents (isteğe bağlı)
+cd ../Translation-Agent && python translation_agent.py      # Port: 8004
+cd ../Document-Analysis-Agent && python document_analysis_agent.py  # Port: 8005
+cd ../Weather-Agent && python weather_agent.py             # Port: 8006
+cd ../Code-Review-Agent && python code_review_agent.py     # Port: 8007
 ```
 
 📖 **[A2A-Agent Dokümantasyonu →](A2A-Agent/README.md)**
@@ -141,7 +154,7 @@ flowchart LR
 ## 📁 **Proje Yapısı**
 
 ```
-Agents-Denemeler/
+Agents-Notebooks/
 ├── 🎥 Youtube Video - RAG - Agent/      # Ana proje (Streamlit UI)
 │   ├── streamlit_app.py                 # Web arayüzü
 │   ├── youtube_qa_agent.py              # Core agent logic
@@ -158,8 +171,19 @@ Agents-Denemeler/
 │   ├── embedding_agent.py               # Embedding yardımcıları
 │   ├── ui_streamlit.py                  # Opsiyonel UI
 │   ├── common.py                        # Ortak yardımcılar (LM Studio, JSON-RPC)
-│   ├── README.md
-│   └── logs/                            # Log dosyaları
+│   └── README.md
+├── 🌐 Translation-Agent/                # Türkçe-İngilizce çeviri ajanı
+│   ├── translation_agent.py            # Çeviri servisi
+│   └── README.md
+├── 📄 Document-Analysis-Agent/          # Doküman analizi ve özetleme ajanı
+│   ├── document_analysis_agent.py      # Metin analiz servisi
+│   └── README.md
+├── 🌤️ Weather-Agent/                    # Hava durumu bilgi ajanı
+│   ├── weather_agent.py                # Hava durumu servisi
+│   └── README.md
+├── 💻 Code-Review-Agent/                # Kod analizi ve review ajanı
+│   ├── code_review_agent.py            # Kod analiz servisi
+│   └── README.md
 └── requirements.txt                     # Ortak bağımlılıklar
 ```
 
@@ -291,6 +315,16 @@ python langraph_dynamic_temperature.py --prompt "Kısa bir motivasyon cümlesi y
 - [ ] 📊 **Video Timeline Navigation**
 - [ ] 📤 **Export Features** (PDF/Word)
 - [ ] 🌍 **Multi-language Support**
+
+### 🤖 **A2A Agent Sistemi**
+- [x] ✅ **Translation Agent** - Türkçe-İngilizce çeviri eklendi
+- [x] ✅ **Document Analysis Agent** - Metin analizi eklendi
+- [x] ✅ **Weather Agent** - Hava durumu eklendi
+- [x] ✅ **Code Review Agent** - Kod analizi eklendi
+- [ ] 🔄 **News Agent** - Haber alma ve özetleme
+- [ ] 📅 **Calendar Agent** - Takvim yönetimi
+- [ ] 📧 **Email Agent** - Email işleme
+- [ ] 💰 **Finance Agent** - Finansal hesaplamalar
 
 ### 🔧 **LangGraph Örnekleri**
 - [ ] 💾 Kalıcı hafıza (SQLite / dosya) ekleme
