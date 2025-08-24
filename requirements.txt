@@ -17,3 +17,11 @@ uvicorn
 # Optional: A2A SDK HTTP server helpers (not strictly required by our minimal server)
 a2a-sdk[http-server]
 numpy
+
+# MongoDB Agent dependencies
+pymongo
+flask
+langchain
+langchain-openai
+openai
+pydantic
