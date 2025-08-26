@@ -13,15 +13,15 @@ from rich.markdown import Markdown
 
 class MongoDBAgent:
     def __init__(self, mongo_uri="mongodb://localhost:27017/", db_name="test"):
-        """Initialize MongoDB connection and Ollama settings"""
+        """Initialize MongoDB connection and LM Studio settings"""
         self.console = Console()
         
         with self.console.status("[bold green]Connecting to MongoDB..."):
             self.client = pymongo.MongoClient(mongo_uri)
             self.db = self.client[db_name]
         
-        self.ollama_url = "http://localhost:11434/api/generate"
-        self.model = "gemma3:12b"  # Default model, can be changed
+        self.lm_studio_url = "http://localhost:1234/v1/chat/completions"
+        self.model = "google/gemma-3n-e4b"  # Default model, can be changed
         
     def set_database(self, db_name):
         """Change the current database"""
@@ -34,27 +34,31 @@ class MongoDBAgent:
         with self.console.status("[bold green]Fetching collections..."):
             return list(self.db.list_collection_names())
     
-    def query_ollama(self, prompt):
-        """Send a query to Ollama and get a response"""
+    def query_lm_studio(self, prompt):
+        """Send a query to LM Studio and get a response"""
         headers = {"Content-Type": "application/json"}
         data = {
             "model": self.model,
-            "prompt": prompt,
+            "messages": [
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.1,
+            "max_tokens": 1000,
             "stream": False
         }
         
         with self.console.status(f"[bold cyan]Querying {self.model}..."):
             try:
-                response = requests.post(self.ollama_url, headers=headers, json=data)
+                response = requests.post(self.lm_studio_url, headers=headers, json=data)
                 if response.status_code == 200:
-                    return response.json()["response"]
+                    return response.json()["choices"][0]["message"]["content"]
                 else:
                     return f"Error: {response.status_code} - {response.text}"
             except Exception as e:
-                return f"Error communicating with Ollama: {str(e)}"
+                return f"Error communicating with LM Studio: {str(e)}"
     
     def extract_query_parameters(self, collection_name, user_query):
-        """Use Ollama to interpret the user's query and extract MongoDB query parameters"""
+        """Use LM Studio to interpret the user's query and extract MongoDB query parameters"""
         collections = self.list_collections()
         if collection_name not in collections:
             # Try to find the closest matching collection or use the first available one
@@ -90,7 +94,7 @@ class MongoDBAgent:
         Don't include explanations, just the JSON object.
         """
         
-        llm_response = self.query_ollama(system_prompt)
+        llm_response = self.query_lm_studio(system_prompt)
         
         # Extract JSON from the response
         json_match = re.search(r'({.*})', llm_response.replace('\n', ' '), re.DOTALL)
@@ -160,7 +164,7 @@ class MongoDBAgent:
         # Get available collections first for context
         available_collections = self.list_collections()
         
-        # Ask Ollama to determine what the user wants to do with context of available collections
+        # Ask LM Studio to determine what the user wants to do with context of available collections
         system_prompt = f"""
         Based on this user input: "{user_input}"
         The available collections in the database are: {available_collections}
@@ -174,7 +178,7 @@ class MongoDBAgent:
         Just output the JSON, nothing else.
         """
         
-        llm_response = self.query_ollama(system_prompt)
+        llm_response = self.query_lm_studio(system_prompt)
         
         # Extract JSON from the response
         json_match = re.search(r'({.*})', llm_response.replace('\n', ' '), re.DOTALL)
@@ -301,7 +305,7 @@ def main():
     console = Console()
     
     console.print(Panel.fit(
-        "[bold blue]MongoDB Agent[/] with [bold green]Ollama Integration[/]",
+        "[bold blue]MongoDB Agent[/] with [bold green]LM Studio Integration[/]",
         border_style="cyan"
     ))
     
@@ -324,8 +328,8 @@ def main():
         else:
             console.print("[yellow]No collections found in this database[/]")
         
-        # Set Ollama model
-        agent.model = Prompt.ask("\nEnter Ollama model to use", default="gemma3:12b")
+        # Set LM Studio model
+        agent.model = Prompt.ask("\nEnter LM Studio model to use", default="google/gemma-3n-e4b")
         
         # Main interaction loop
         console.print(Panel(

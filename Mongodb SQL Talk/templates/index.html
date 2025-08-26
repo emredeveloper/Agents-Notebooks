@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB LangChain Agent - Enhanced</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1><i class="fas fa-database"></i> MongoDB LangChain Agent</h1>
+                    <p>AI-Powered Database Interface with Natural Language Processing</p>
+                </div>
+                <div class="connection-status">
+                    <div class="status-indicator" id="connectionStatus">
+                        <i class="fas fa-circle"></i>
+                        <span>Connected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-brain"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">AI Model</span>
+                        <span class="stat-value">{{ model_name }}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-database"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Database</span>
+                        <span class="stat-value">{{ database_name }}</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-bolt"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Status</span>
+                        <span class="stat-value" id="status">Ready</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-comments"></i>
+                    <div class="stat-info">
+                        <span class="stat-label">Messages</span>
+                        <span class="stat-value" id="messageCount">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Collection Selector -->
+            <div class="collection-selector">
+                <div class="selector-header">
+                    <h4><i class="fas fa-layer-group"></i> Collection Context</h4>
+                    <button class="refresh-btn" onclick="refreshCollections()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div class="selector-content">
+                    <select id="collectionSelect" class="collection-dropdown" onchange="onCollectionChange()">
+                        <option value="">🗄️ Tüm Database (Genel Sohbet)</option>
+                    </select>
+                    <div class="collection-info">
+                        <div class="info-item">
+                            <span class="info-label">Aktif Context:</span>
+                            <span class="info-value" id="activeContext">Database</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Kayıt Sayısı:</span>
+                            <span class="info-value" id="recordCount">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-btn" onclick="quickQuery('koleksiyonları listele')">
+                    <i class="fas fa-list"></i> Collections
+                </button>
+                <button class="action-btn" onclick="quickQuery('kaç collection var')">
+                    <i class="fas fa-chart-bar"></i> Count
+                </button>
+                <button class="action-btn" onclick="quickQuery('ilk 5 veriyi göster')">
+                    <i class="fas fa-eye"></i> Show Data
+                </button>
+                <button class="action-btn" onclick="clearChat()">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+                <button class="action-btn" onclick="exportChat()">
+                    <i class="fas fa-download"></i> Export
+                </button>
+            </div>
+        </div>
+        
+        <!-- Chat Container -->
+        <div class="chat-section">
+            <div class="chat-header">
+                <h3><i class="fas fa-comments"></i> Conversation</h3>
+                <div class="chat-controls">
+                    <button class="control-btn" onclick="toggleAutoScroll()">
+                        <i class="fas fa-arrow-down" id="scrollIcon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-container" id="chatContainer">
+                <div class="message bot-message welcome-message">
+                    <div class="message-header">
+                        <div class="avatar bot-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-info">
+                            <span class="sender">MongoDB Agent</span>
+                            <span class="timestamp" id="welcomeTime"></span>
+                        </div>
+                    </div>
+                    <div class="message-content">
+                        <h4>🎉 Hoş Geldiniz!</h4>
+                        <p>MongoDB veritabanınızla doğal dilde konuşabilirsiniz!</p>
+                        
+                        <div class="command-examples">
+                            <h5>📝 Örnek Komutlar:</h5>
+                            <div class="example-grid">
+                                <div class="example-item" onclick="quickQuery('koleksiyonları listele')">
+                                    <i class="fas fa-list"></i>
+                                    <span>"koleksiyonları listele"</span>
+                                </div>
+                                <div class="example-item" onclick="quickQuery('ilk 10 veriyi göster')">
+                                    <i class="fas fa-table"></i>
+                                    <span>"ilk 10 veriyi göster"</span>
+                                </div>
+                                <div class="example-item" onclick="quickQuery('adı Ahmet olanları bul')">
+                                    <i class="fas fa-search"></i>
+                                    <span>"adı Ahmet olanları bul"</span>
+                                </div>
+                                <div class="example-item" onclick="quickQuery('kaç kayıt var')">
+                                    <i class="fas fa-calculator"></i>
+                                    <span>"kaç kayıt var?"</span>
+                                </div>
+                                <div class="example-item" onclick="quickQuery('yeni kullanıcı ekle')">
+                                    <i class="fas fa-plus"></i>
+                                    <span>"yeni kullanıcı ekle"</span>
+                                </div>
+                                <div class="example-item" onclick="quickQuery('fiyatı 100den büyük ürünler')">
+                                    <i class="fas fa-filter"></i>
+                                    <span>"fiyatı 100'den büyük ürünler"</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-highlights">
+                            <div class="feature">
+                                <i class="fas fa-magic"></i>
+                                <span>Doğal Dil İşleme</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-cogs"></i>
+                                <span>Dinamik Şema Analizi</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Güvenli İşlemler</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <div class="input-group">
+                        <div class="input-field-wrapper">
+                            <input type="text" 
+                                   id="queryInput" 
+                                   class="input-field" 
+                                   placeholder="MongoDB sorgunuzu yazın... (örn: 'kullanıcıları listele')" 
+                                   onkeypress="handleKeyPress(event)"
+                                   autocomplete="off">
+                            <div class="input-suggestions" id="suggestions"></div>
+                        </div>
+                        <button class="send-button" onclick="sendQuery()" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Gönder</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Input Help -->
+                <div class="input-help">
+                    <div class="help-item">
+                        <kbd>Enter</kbd> Gönder
+                    </div>
+                    <div class="help-item">
+                        <kbd>Ctrl+L</kbd> Temizle
+                    </div>
+                    <div class="help-item">
+                        <kbd>Ctrl+E</kbd> Dışa Aktar
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>AI işliyor...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        // Initialize welcome timestamp
+        document.getElementById('welcomeTime').textContent = new Date().toLocaleTimeString('tr-TR');
+    </script>
+</body>
+</html>
