@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BeeAI Agent (LM Studio)</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
+      .row { display: flex; gap: 24px; align-items: flex-start; }
+      .col { flex: 1; }
+      .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-top: 12px; }
+      .imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 12px; }
+      img { width: 100%; height: auto; border-radius: 6px; border: 1px solid #eee; }
+      label { display:block; font-weight:600; margin-top:8px; }
+      input[type="text"], textarea { width:100%; padding:8px; border:1px solid #d1d5db; border-radius:6px; }
+      button { padding: 8px 14px; border: 1px solid #2563eb; background:#2563eb; color:white; border-radius:6px; cursor:pointer; }
+      .muted { color:#6b7280; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <h1>BeeAI Agent UI (FastAPI + LM Studio)</h1>
+
+    <div class="row">
+      <div class="col">
+        <label for="prompt">Your question</label>
+        <textarea id="prompt" rows="5">If I travel to Rome next weekend, what should I expect in terms of weather, and also tell me one famous historical landmark there?</textarea>
+        <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
+          <button id="run">Run Agent</button>
+          <label class="muted">Image topic (optional):</label>
+          <input id="topic" type="text" placeholder="e.g., Rome or Colosseum" />
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <h3>Agent answer</h3>
+          <div id="answer" class="muted">Waiting...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Related images</h3>
+      <div id="images" class="imgs"></div>
+    </div>
+
+    <script>
+      function streamImages(prompt, answer, topic) {
+        const imgs = document.getElementById('images');
+        imgs.innerHTML = '';
+        const params = new URLSearchParams({ prompt, limit: '8', delay: '0.3' });
+        if (answer) params.set('answer', answer);
+        if (topic) params.set('topic', topic);
+
+        const es = new EventSource('/api/images/stream?' + params.toString());
+        es.onmessage = (ev) => {
+          try {
+            const data = JSON.parse(ev.data);
+            if (data.url) {
+              const fig = document.createElement('figure');
+              const img = document.createElement('img');
+              img.src = data.url; img.alt = data.title || '';
+              const cap = document.createElement('figcaption');
+              cap.textContent = data.title || '';
+              cap.className = 'muted';
+              fig.appendChild(img); fig.appendChild(cap);
+              imgs.appendChild(fig);
+            }
+          } catch (e) { /* ignore */ }
+        };
+        es.onerror = () => { es.close(); };
+      }
+
+      document.getElementById('run').addEventListener('click', async () => {
+        const prompt = document.getElementById('prompt').value.trim();
+        const topic = document.getElementById('topic').value.trim();
+        const ansEl = document.getElementById('answer');
+        ansEl.textContent = 'Thinking...';
+        try {
+          const resp = await fetch('/api/ask', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
+          });
+          const data = await resp.json();
+          const answer = data.answer || 'No answer';
+          ansEl.textContent = answer;
+          streamImages(prompt, answer, topic);
+        } catch (e) {
+          ansEl.textContent = 'Error: ' + (e?.message || e);
+        }
+      });
+    </script>
+  </body>
+  </html>

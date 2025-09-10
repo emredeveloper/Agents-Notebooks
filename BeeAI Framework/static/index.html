@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BeeAI Agent (LM Studio)</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="brand">BeeAI Agent UI</div>
+        <div class="muted">FastAPI • LM Studio • SSE</div>
+      </div>
+
+      <form id="form" class="controls card" autocomplete="off">
+        <textarea id="prompt">If I travel to Rome next weekend, what should I expect in terms of weather, and also tell me one famous historical landmark there?</textarea>
+        <input id="topic" type="text" placeholder="Image topic (optional): e.g., Rome or Colosseum" />
+        <select id="delay">
+          <option value="0.15">Fast</option>
+          <option value="0.25" selected>Normal</option>
+          <option value="0.5">Calm</option>
+        </select>
+        <button class="button" type="submit">Run Agent</button>
+      </form>
+
+      <div class="grid">
+        <section class="card">
+          <h3>Related images</h3>
+          <div class="images"></div>
+        </section>
+        <section class="card">
+          <h3>Agent answer</h3>
+          <div id="answer" class="muted">Waiting…</div>
+        </section>
+      </div>
+
+      <div class="footer">© 2025 BeeAI Demo – Minimal, fast, and effective UI</div>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

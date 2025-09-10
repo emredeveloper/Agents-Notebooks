@@ -12,6 +12,7 @@ requests
 google-generativeai
 streamlit
 streamlit-chat
+beautifulsoup4
 fastapi
 uvicorn
 # Optional: A2A SDK HTTP server helpers (not strictly required by our minimal server)
@@ -25,3 +26,6 @@ langchain
 langchain-openai
 openai
 pydantic
+
+# Pretty console output
+rich
