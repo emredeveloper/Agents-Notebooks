@@ -59,3 +59,13 @@ memory.json
 # ---- Misc ----
 *.bak
 *.orig
+
+# ---- Databases / Temp (Agno / Sqlite) ----
+*.db
+*.sqlite
+tmp/
+Agno/tmp/
+
+# ---- Tool / Lint caches ----
+.ruff_cache/
+.coverage.*
