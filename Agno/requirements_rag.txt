@@ -1,0 +1,39 @@
+# Advanced Ollama RAG Agent with Ollama Embeddings
+
+# Core Agno framework
+agno>=0.1.0
+
+# Rich terminal interface
+rich>=13.0.0
+
+# Data validation and settings management
+pydantic>=2.0.0
+
+# PDF processing
+PyPDF2>=3.0.0
+
+# HTTP requests for URL downloads
+requests>=2.31.0
+
+# Math operations for similarity calculations
+# (usually included in Python standard library)
+
+# Ollama Requirements:
+# Make sure these models are pulled:
+# ollama pull llama3.2:3b           # For chat
+# ollama pull embeddinggemma:latest # For embeddings
+
+# Optional: Better PDF processing
+# pypdf>=3.0.0
+
+# Optional: For advanced text processing
+# nltk>=3.8
+# spacy>=3.7.0
+
+# Development dependencies (optional)
+# black>=23.0.0
+# pytest>=7.0.0
+# mypy>=1.0.0
+
+# Note: sqlite-vec extension would need separate installation
+# See: https://github.com/asg017/sqlite-vec

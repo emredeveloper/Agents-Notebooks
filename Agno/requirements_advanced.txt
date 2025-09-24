@@ -1,0 +1,19 @@
+# Advanced Ollama Agent Requirements
+
+# Core Agno framework
+agno
+
+# Rich terminal interface
+rich
+
+# Data validation and settings management
+pydantic
+
+# Additional dependencies (eğer gerekirse)
+# SQLite support (Python built-in)
+# JSON support (Python built-in)
+
+# Development dependencies (optional)
+# black>=23.0.0
+# pytest>=7.0.0
+# mypy>=1.0.0

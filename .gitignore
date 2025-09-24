@@ -66,6 +66,52 @@ memory.json
 tmp/
 Agno/tmp/
 
+# ---- Data Files ----
+*.csv
+*.xlsx
+*.xls
+*.json
+!requirements*.json
+!package*.json
+!*config*.json
+*.pkl
+*.pickle
+*.parquet
+*.h5
+*.hdf5
+
+# ---- Document Files ----
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.pptx
+*.txt
+!README*.txt
+!LICENSE*.txt
+!requirements*.txt
+
+# ---- Media Files ----
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.svg
+*.ico
+*.mp3
+*.mp4
+*.wav
+*.avi
+*.mov
+
+# ---- Archive Files ----
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
 # ---- Tool / Lint caches ----
 .ruff_cache/
 .coverage.*
