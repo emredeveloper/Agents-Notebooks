@@ -1,24 +1,24 @@
-"""Persona branching (paralel thread) demo.
+"""Persona branching (parallel threads) demo.
 
-Aynı kullanıcı girdisini farklı persona (sistem rolü) mesajlarıyla
-ayrı thread'lerde (thread_id) koşturur ve cevapları karşılaştırır.
+Sends the same user input to different personas (system roles) in separate
+threads (thread_id) and compares the outputs.
 
-Özellikler:
-- InMemorySaver ile her persona için izole hafıza
-- Ortak başlangıç prompt'u
-- Cevapların yan yana özetlenmesi
-- Basit metin farkı (diff) gösterimi
+Features:
+- Isolated memory per persona via InMemorySaver
+- Shared initial prompt
+- Side-by-side summary of answers
+- Simple textual diff display
 
-Kullanım (Windows cmd.exe):
-  python langraph_branch_personas.py --prompt "Kısa bir motivasyon cümlesi yaz" --temperature 0.7
+Usage (Windows cmd.exe):
+  python langraph_branch_personas.py --prompt "Write a short motivational sentence" --temperature 0.7
 
-İsteğe bağlı env değişkenleri:
-  LG_BASE_URL  (varsayılan http://127.0.0.1:1234/v1)
-  LG_API_KEY   (varsayılan lm-studio)
-  LG_MODEL     (varsayılan google/gemma-3n-e4b)
+Optional env vars:
+  LG_BASE_URL  (default http://127.0.0.1:1234/v1)
+  LG_API_KEY   (default lm-studio)
+  LG_MODEL     (default google/gemma-3n-e4b)
 
-Not: Model deterministik değilse (temperature > 0), farklılıklar sadece
-persona'dan değil örnekleme rastgeleliğinden de kaynaklanabilir.
+Note: If the model is non-deterministic (temperature > 0), differences can
+come not only from personas but also from sampling randomness.
 """
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ from langgraph.graph.message import add_messages
 from langgraph.checkpoint.memory import InMemorySaver
 from openai import OpenAI, APIConnectionError
 
-# Rich (renkli konsol) – yoksa graceful fallback
+# Rich (colored console) – graceful fallback if unavailable
 try:
     from rich.console import Console
     from rich.table import Table
@@ -53,40 +53,40 @@ else:  # type: ignore
 logging.basicConfig(level=os.environ.get("LG_LOG_LEVEL", "INFO"))
 logger = logging.getLogger("langraph_branch_personas")
 
-# Ortak konfig
+# Shared config
 BASE_URL = os.environ.get("LG_BASE_URL", "http://127.0.0.1:1234/v1")
 API_KEY = os.environ.get("LG_API_KEY", "lm-studio")
 MODEL = os.environ.get("LG_MODEL", "google/gemma-3n-e4b")
 RETRY_ATTEMPTS = int(os.environ.get("LG_RETRY_ATTEMPTS", "3"))
 RETRY_BACKOFF = float(os.environ.get("LG_RETRY_BACKOFF", "0.6"))
 
-# Persona tanımları (id, system mesajı) – TÜMÜ TÜRKÇE ve İngilizce üretmemesi istenir.
+# Persona definitions (id, system message)
 PERSONAS = [
     {
-        "id": "sicak",
+        "id": "warm",
         "system": (
-            "Sen sıcak, destekleyici bir asistansın. Yalnızca TÜRKÇE yaz. Emojiyi ölçülü kullan. "
-            "Cevap çok kısa (en fazla 1-2 cümle) ve motive edici olsun. İngilizce kelime kullanma."
+            "You are a warm and supportive assistant. Write in Turkish only. Use emojis sparingly. "
+            "Keep the reply very short (1–2 sentences) and motivating. Do not use English words."
         ),
     },
     {
-        "id": "resmi",
+        "id": "formal",
         "system": (
-            "Sen resmi ve öz bir asistansın. Yalnızca TÜRKÇE yaz. Tek net motivasyon cümlesi üret. "
-            "Sade ve duygusuz bir üslup kullan. İngilizce kullanma."
+            "You are formal and concise. Write in Turkish only. Produce a single clear motivational sentence. "
+            "Use a plain, neutral tone. Do not use English."
         ),
     },
     {
-        "id": "egitmen",
+        "id": "instructor",
         "system": (
-            "Sen didaktik bir eğitmensin. Yalnızca TÜRKÇE yaz. İç düşüncelerini listeleme, sadece nihai kısa motivasyon cümlesi ver. "
-            "İngilizce açıklama ya da çeviri ekleme."
+            "You are a didactic instructor. Write in Turkish only. Do not list inner thoughts; produce only the final short motivational sentence. "
+            "Do not add English explanations or translations."
         ),
     },
     {
-        "id": "supheci",
+        "id": "skeptical",
         "system": (
-            "Sen nazik ama hafif şüpheci bir asistansın. Yalnızca TÜRKÇE yaz. Önce tek cümlelik motivasyon ver, sonra (isteğe bağlı) çok kısa bir ikinci cümlede varsayımları sorgula. İngilizce yazma."
+            "You are polite but slightly skeptical. Write in Turkish only. First give a one-sentence motivation, then optionally a very short second sentence questioning assumptions. Do not write in English."
         ),
     },
 ]
@@ -101,7 +101,7 @@ client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
 
 def llm_node(state: AgentState, *, temperature: float, max_tokens: int) -> AgentState:
-    """LLM düğümü: mesajları modele iletir, cevap ekler."""
+    """LLM node: send messages to the model and append the reply."""
 
     def _role_for(m: AnyMessage) -> str:
         if isinstance(m, HumanMessage):
@@ -131,17 +131,17 @@ def llm_node(state: AgentState, *, temperature: float, max_tokens: int) -> Agent
             }
         except APIConnectionError as e:
             last_err = e
-            logger.warning("Bağlantı denemesi %d/%d başarısız: %s", attempt, RETRY_ATTEMPTS, e)
+            logger.warning("Connection attempt %d/%d failed: %s", attempt, RETRY_ATTEMPTS, e)
             time.sleep(RETRY_BACKOFF * attempt)
     raise last_err
 
 
 def build_graph(temperature: float, max_tokens: int):
     g = StateGraph(AgentState)
-    # closure param kullanımını sağlamak için lambda ile sarıyoruz
+    # Wrap in a lambda to close over parameters
     g.add_node("llm", lambda s: llm_node(s, temperature=temperature, max_tokens=max_tokens))
     g.add_edge(START, "llm")
-    g.add_edge("llm", END)  # tek atış
+    g.add_edge("llm", END)  # single shot
     return g
 
 
@@ -149,7 +149,7 @@ def last_ai_content(msgs: List[AnyMessage]) -> str:
     for m in reversed(msgs):
         if isinstance(m, AIMessage):
             return m.content
-    return "(AI cevabı bulunamadı)"
+    return "(No AI answer found)"
 
 
 def make_diff(a: str, b: str, max_lines: int = 80) -> List[str]:
@@ -159,14 +159,14 @@ def make_diff(a: str, b: str, max_lines: int = 80) -> List[str]:
         )
     )
     if len(diff_lines) > max_lines:
-        diff_lines = diff_lines[: max_lines - 1] + ["... (kısaltıldı)"]
-    return diff_lines or ["(Fark yok)"]
+        diff_lines = diff_lines[: max_lines - 1] + ["... (truncated)"]
+    return diff_lines or ["(No differences)"]
 
 
 def render_summary_table(results: list, max_preview: int):
     if not _console:
-        # Basit fallback
-        print("--- Özet Tablo (Rich yok) ---")
+        # Simple fallback
+        print("--- Summary Table (Rich missing) ---")
         for r in results:
             preview = r["answer"].strip().replace("\n", " ")
             if len(preview) > max_preview:
@@ -175,10 +175,10 @@ def render_summary_table(results: list, max_preview: int):
             print(f"[{r['id']}] -> {preview}{warn}")
         return
 
-    table = Table(title="Persona Özetleri", box=box.SIMPLE_HEAVY, show_lines=False)
+    table = Table(title="Persona Summaries", box=box.SIMPLE_HEAVY, show_lines=False)
     table.add_column("Persona", style="cyan", no_wrap=True)
-    table.add_column("Önizleme", style="white")
-    table.add_column("Uyarı", style="magenta", no_wrap=True)
+    table.add_column("Preview", style="white")
+    table.add_column("Warning", style="magenta", no_wrap=True)
     for r in results:
         preview = r["answer"].strip().replace("\n", " ")
         if len(preview) > max_preview:
@@ -190,18 +190,18 @@ def render_summary_table(results: list, max_preview: int):
 
 def render_reference(base: dict):
     if not _console:
-        print(f"=== Referans: {base['id']} ===\n{base['answer']}\n")
+        print(f"=== Reference: {base['id']} ===\n{base['answer']}\n")
         return
-    _console.print(Panel(base["answer"], title=f"Referans: {base['id']}", title_align="left", border_style="green"))
+    _console.print(Panel(base["answer"], title=f"Reference: {base['id']}", title_align="left", border_style="green"))
 
 
 def _word_tokens(s: str) -> List[str]:
-    # Basit boşluk ayırma; daha iyi sonuç için regex ile kelime + noktalama ayrılabilir.
+    # Simple whitespace split; for better results, split words/punct with regex.
     return s.split()
 
 
 def word_level_diff(a: str, b: str) -> Iterable[tuple[str, str]]:
-    """Kelime bazlı diff üret (op, token). op: ' ', '-', '+', '~'(değişim bloğu)."""
+    """Produce word-level diff (op, token). op: ' ', '-', '+', '~'(change block)."""
     import difflib
     a_tokens = _word_tokens(a)
     b_tokens = _word_tokens(b)
@@ -226,7 +226,7 @@ def word_level_diff(a: str, b: str) -> Iterable[tuple[str, str]]:
 
 def render_side_by_side(base_text: str, other_text: str, left_title: str, right_title: str):
     if not _console:
-        print(f"--- Side-by-side diff ({left_title} | {right_title}) (Rich yok) ---")
+        print(f"--- Side-by-side diff ({left_title} | {right_title}) (Rich missing) ---")
         base_lines = base_text.splitlines()
         other_lines = other_text.splitlines()
         width = max(len(l) for l in base_lines) if base_lines else 40
@@ -236,7 +236,7 @@ def render_side_by_side(base_text: str, other_text: str, left_title: str, right_
             print(f"{l:<{width}} | {r}")
         return
     from itertools import zip_longest
-    table = Table(title=f"Yan Yana: {left_title} ↔ {right_title}", box=box.SIMPLE, show_lines=False)
+    table = Table(title=f"Side-by-side: {left_title} ↔ {right_title}", box=box.SIMPLE, show_lines=False)
     table.add_column(left_title, style="white", ratio=1)
     table.add_column(right_title, style="white", ratio=1)
     for a_line, b_line in zip_longest(base_text.splitlines(), other_text.splitlines(), fillvalue=""):
@@ -262,7 +262,7 @@ def render_word_diff(base: dict, other: dict):
             text.append(tok + ' ', style="red")
         elif op == '+':
             text.append(tok + ' ', style="green")
-    _console.print(Panel(text, title=f"Kelime Farkları: {base['id']} vs {other['id']}", border_style="purple"))
+    _console.print(Panel(text, title=f"Word Differences: {base['id']} vs {other['id']}", border_style="purple"))
 
 
 def render_unified_diff(base: dict, other: dict):
@@ -306,7 +306,7 @@ def run_branching(
     strict_turkish: bool,
     diff_mode: str,
 ):
-    # Ortak graph + checkpoint (her persona thread_id farklı olduğundan ayrışacak)
+    # Shared graph + checkpoint (each persona has a unique thread_id)
     graph_builder = build_graph(temperature=temperature, max_tokens=max_tokens)
     checkpoint = InMemorySaver()
     graph = graph_builder.compile(checkpointer=checkpoint)
@@ -322,18 +322,18 @@ def run_branching(
             ],
             "turn": 0,
         }
-        logger.info("Persona '%s' çalışıyor (thread_id=%s)", persona["id"], thread_id)
+        logger.info("Running persona '%s' (thread_id=%s)", persona["id"], thread_id)
         final_state = graph.invoke(initial, config)
         answer = last_ai_content(final_state["messages"])
         if strict_turkish:
-            # Basit İngilizce tespiti: tipik İngilizce kelimeler içeriyor mu?
+            # Simple English detection: does it contain common English words?
             eng_tokens = ["the", "and", "you", "your", "Okay", "Success", "learning", "step", "Let's"]
             lowered = answer.lower()
             eng_hits = [w for w in eng_tokens if w.lower() in lowered]
             warning = None
             if eng_hits:
-                warning = f"(UYARI: İngilizce öğeler bulundu: {', '.join(eng_hits)})"
-                # İstersen burada basit filtre uygulayabilirsin; şimdilik sadece uyarı.
+                warning = f"(WARNING: English tokens detected: {', '.join(eng_hits)})"
+                # Optional: apply a simple filter; for now, only warn.
             results.append({
                 "id": persona["id"],
                 "system": persona["system"],
@@ -347,20 +347,20 @@ def run_branching(
                 "answer": answer,
             })
 
-    # Çıktıları göster
-    print("\n=== Persona Cevapları (Prompt): ===")
+    # Display outputs
+    print("\n=== Persona Answers (Prompt): ===")
     print(prompt)
-    # Özet tablo (renkli)
+    # Summary table (colored)
     if _console:
-        _console.rule("Özet")
+        _console.rule("Summary")
     else:
-        print("\n--- Özet Tablo ---")
+        print("\n--- Summary Table ---")
     render_summary_table(results, max_preview)
 
     if show_diff and results:
         base = results[0]
         if _console:
-            _console.rule("Referans")
+            _console.rule("Reference")
         render_reference(base)
         for r in results[1:]:
             render_diff(base, r, diff_mode)
@@ -369,19 +369,19 @@ def run_branching(
 
 
 def parse_args():
-    ap = argparse.ArgumentParser(description="Persona branching karşılaştırma demosu")
-    ap.add_argument("--prompt", required=False, default="Kısa bir motivasyon cümlesi yaz.", help="Kullanıcı girişi")
-    ap.add_argument("--temperature", type=float, default=0.7, help="Model sıcaklığı")
-    ap.add_argument("--max-tokens", type=int, default=256, help="Maksimum yanıt token")
-    ap.add_argument("--list-personas", action="store_true", help="Sadece persona listesini yaz ve çık")
-    ap.add_argument("--no-diff", action="store_true", help="Diff çıktısını gösterme")
-    ap.add_argument("--max-preview-chars", type=int, default=120, help="Özet tablo satır önizleme uzunluğu")
-    ap.add_argument("--strict-turkish", action="store_true", help="Basit İngilizce tespiti yap ve uyarı ver")
+    ap = argparse.ArgumentParser(description="Persona branching comparison demo")
+    ap.add_argument("--prompt", required=False, default="Write a short motivational sentence.", help="User input")
+    ap.add_argument("--temperature", type=float, default=0.7, help="Model temperature")
+    ap.add_argument("--max-tokens", type=int, default=256, help="Max response tokens")
+    ap.add_argument("--list-personas", action="store_true", help="List personas and exit")
+    ap.add_argument("--no-diff", action="store_true", help="Do not show diff output")
+    ap.add_argument("--max-preview-chars", type=int, default=120, help="Summary preview length")
+    ap.add_argument("--strict-turkish", action="store_true", help="Detect English leakage and warn")
     ap.add_argument(
         "--diff-mode",
         choices=["unified", "side", "words", "all"],
         default="unified",
-        help="Diff gösterim modu (unified=klasik, side=yan yana, words=kelime, all=hepsi)",
+        help="Diff display mode (unified, side, words, or all)",
     )
     return ap.parse_args()
 

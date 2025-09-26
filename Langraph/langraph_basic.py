@@ -1,7 +1,6 @@
 """
-LangGraph agent that uses a locally-hosted LLM via LM Deploy
-(OpenAI-compatible endpoint).  The agent keeps looping until
-the LLM’s reply contains the word "done".
+LangGraph agent that uses a locally hosted LLM via an OpenAI-compatible endpoint.
+The agent keeps looping until the LLM's reply contains the word "done".
 """
 from typing import TypedDict, Annotated
 from langchain_core.messages import AnyMessage, HumanMessage, AIMessage
@@ -33,8 +32,8 @@ logger = logging.getLogger("langraph_app")
 # ------------------------- State -------------------------
 
 class AgentState(TypedDict):
-    messages: Annotated[list[AnyMessage], add_messages]   # sohbet geçmişi
-    turn: int                                             # kaç tur geçti
+    messages: Annotated[list[AnyMessage], add_messages]   # conversation history
+    turn: int                                             # number of turns elapsed
 
 
 # ------------------------- LLM client --------------------
@@ -42,7 +41,7 @@ class AgentState(TypedDict):
 client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
 def llm_node(state: AgentState) -> AgentState:
-    """LangGraph node: LLM’yi çağır ve cevabı state’e ekle."""
+    """LangGraph node: call the LLM and append the reply to state."""
     def _role_for(m: AnyMessage) -> str:
         # Map internal message objects to OpenAI-compatible roles.
         if isinstance(m, HumanMessage):
@@ -75,14 +74,14 @@ def llm_node(state: AgentState) -> AgentState:
             last_err = e
             logger.warning("Connection attempt %d/%d failed: %s", attempt, RETRY_ATTEMPTS, e)
             time.sleep(RETRY_BACKOFF * attempt)
-    # If we reach here, retries failed
+    # If we reach here, all retries failed
     logger.error("Failed to contact LLM after %d attempts: %s", RETRY_ATTEMPTS, last_err)
     raise last_err
 
 # ------------------------- Routing -----------------------
 
 def should_continue(state: AgentState) -> str:
-    """Cevapta 'done' varsa dur, yoksa devam et."""
+    """Stop if the reply contains 'done'; otherwise continue."""
     last = state["messages"][-1]
     # Stop if we've reached the configured maximum number of turns.
     if state.get("turn", 0) >= MAX_TURNS:
@@ -111,11 +110,11 @@ if __name__ == "__main__":
     parser.add_argument("--max-turns", type=int, default=MAX_TURNS, help="Maximum conversational turns before giving up")
     args = parser.parse_args()
 
-    # honor CLI max-turns for this run
+    # Honor CLI max-turns for this run
     MAX_TURNS = args.max_turns
 
     initial = {
-        "messages": [HumanMessage(content="  Count from 1 to 5")],
+        "messages": [HumanMessage(content="Count from 1 to 5")],
         "turn": 0,
     }
 

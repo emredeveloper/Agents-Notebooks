@@ -1,177 +1,177 @@
 # MongoDB Natural Language Agent
 
-Bu proje, MongoDB veritabanlarıyla doğal dilde konuşmanızı sağlayan akıllı bir agent'tır. LM Studio entegrasyonu ile herhangi bir MongoDB koleksiyonu ve alanıyla çalışabilir.
+This project is an intelligent agent that lets you interact with MongoDB databases in natural language. With LM Studio integration, it can work with any MongoDB collection and fields.
 
-## 🚀 Özellikler
+## 🚀 Features
 
-- **Doğal Dil Anlama**: "adı Ahmet olanları bul" gibi doğal dil sorguları
-- **Dinamik Koleksiyon Tespiti**: Herhangi bir koleksiyon adıyla çalışır
-- **Akıllı Veri Ekleme**: "yeni kullanıcı ekle" gibi komutlarla veri ekleme
-- **Otomatik Şema Analizi**: Mevcut alanları otomatik tespit eder
-- **Web Arayüzü**: Kullanıcı dostu modern web arayüzü
-- **LM Studio Entegrasyonu**: Yerel LLM desteği
+- **Natural Language Understanding**: Queries like "find users whose name is Ahmet"
+- **Dynamic Collection Detection**: Works with any collection name
+- **Smart Data Insertion**: Insert data with commands like "add a new user"
+- **Automatic Schema Analysis**: Automatically detects existing fields
+- **Web Interface**: User-friendly modern web UI
+- **LM Studio Integration**: Local LLM support
 
-## 📋 Gereksinimler
+## 📋 Requirements
 
 - Python 3.8+
-- MongoDB (yerel veya uzak)
-- LM Studio (yerel LLM için)
-- Gerekli Python paketleri (requirements.txt'te)
+- MongoDB (local or remote)
+- LM Studio (for local LLM)
+- Required Python packages (in requirements.txt)
 
-## 🛠 Kurulum
+## 🛠 Setup
 
-1. **Repository'yi klonlayın:**
+1. **Clone the repository:**
    ```bash
    git clone <repository-url>
    cd mongodb-langchain-agent
    ```
 
-2. **Sanal ortam oluşturun:**
+2. **Create a virtual environment:**
    ```bash
    python -m venv venv
    source venv/bin/activate  # Linux/Mac
-   # veya
+   # or
    venv\Scripts\activate     # Windows
    ```
 
-3. **Bağımlılıkları yükleyin:**
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **LM Studio'yu başlatın:**
-   - LM Studio'yu indirin ve çalıştırın
-   - Bir model yükleyin (örn: Qwen, Gemma)
-   - Server'ı port 1234'te başlatın
+4. **Start LM Studio:**
+   - Download and run LM Studio
+   - Load a model (e.g., Qwen, Gemma)
+   - Start the server on port 1234
 
-5. **MongoDB'yi başlatın:**
-   - MongoDB'nin çalıştığından emin olun
-   - Varsayılan: `mongodb://localhost:27017/`
+5. **Start MongoDB:**
+   - Ensure MongoDB is running
+   - Default: `mongodb://localhost:27017/`
 
-## 🎯 Kullanım
+## 🎯 Usage
 
-### Web Arayüzü ile
+### With the Web UI
 
 ```bash
 python mongodb-langchain-agent-clean.py
 ```
 
-Tarayıcıda `http://localhost:5000` adresine gidin.
+Open `http://localhost:5000` in your browser.
 
-### Örnek Sorgular
+### Example Queries
 
-#### Veri Sorgulama:
-- "koleksiyonları listele"
-- "users tablosundaki ilk 5 veriyi göster"
-- "adı Ahmet olan kullanıcıları bul"
-- "yaşı 25'ten büyük olanları listele"
-- "fiyatı 100 ile 500 arasındaki ürünler"
+#### Query Data:
+- "list collections"
+- "show the first 5 records in the users table"
+- "find users whose name is Ahmet"
+- "list those older than 25"
+- "products with price between 100 and 500"
 
-#### Veri Ekleme:
-- "adı Mehmet soyadı Kaya yaşı 30 olan kullanıcı ekle"
-- "yeni ürün ekle: laptop, fiyat 15000"
-- "sipariş ekle: müşteri Ayşe, tutar 250"
+#### Insert Data:
+- "add a user: name Mehmet, surname Kaya, age 30"
+- "add a new product: laptop, price 15000"
+- "add an order: customer Ayşe, amount 250"
 
-#### İstatistikler:
-- "kaç kullanıcı var?"
-- "products koleksiyonunda kaç kayıt var?"
-- "toplam kayıt sayısı nedir?"
+#### Statistics:
+- "how many users are there?"
+- "how many records in the products collection?"
+- "what is the total record count?"
 
-## ⚙️ Yapılandırma
+## ⚙️ Configuration
 
-### Veritabanı Bağlantısı
+### Database Connection
 
 ```python
-# mongodb-langchain-agent-clean.py dosyasında
+# in mongodb-langchain-agent-clean.py
 agent = MongoDBLangChainAgent(
     mongo_uri="mongodb://localhost:27017/",  # MongoDB URI
     lm_studio_url="http://localhost:1234/v1", # LM Studio URL
-    model_name="your-model-name"              # LLM Model adı
+    model_name="your-model-name"              # LLM Model name
 )
 ```
 
-### LM Studio Ayarları
+### LM Studio Settings
 
 ```python
-# LMStudioLLM sınıfında
+# in LMStudioLLM class
 base_url: str = "http://localhost:1234/v1"  # LM Studio URL
-model_name: str = "qwen/qwen3-4b-2507"      # Model adı
+model_name: str = "qwen/qwen3-4b-2507"      # Model name
 ```
 
-## 📁 Proje Yapısı
+## 📁 Project Structure
 
 ```
 mongodb-langchain-agent/
-├── mongodb-langchain-agent-clean.py  # Ana uygulama
+├── mongodb-langchain-agent-clean.py  # Main application
 ├── templates/
-│   └── index.html                    # Web arayüzü
+│   └── index.html                    # Web interface
 ├── static/
 │   ├── css/
-│   │   └── style.css                # Stil dosyası
+│   │   └── style.css                # Stylesheet
 │   └── js/
 │       └── app.js                   # JavaScript
-├── requirements.txt                  # Python bağımlılıkları
-└── README.md                        # Bu dosya
+├── requirements.txt                  # Python dependencies
+└── README.md                        # This file
 ```
 
-## 🔧 Özelleştirme
+## 🔧 Customization
 
-### Yeni Koleksiyon Türleri Ekleme
+### Add New Collection Types
 
 ```python
-# _detect_collection_from_query metodunda
+# in _detect_collection_from_query method
 collection_patterns = {
     'users': ['user', 'kullanıcı', 'kişi', 'person'],
     'products': ['product', 'ürün', 'item'],
     'orders': ['order', 'sipariş', 'purchase'],
     'customers': ['customer', 'müşteri', 'client'],
-    # Yeni türler buraya eklenebilir
+    # Add new types here
 }
 ```
 
-### Örnek Veri Şablonları
+### Sample Data Templates
 
 ```python
-# _add_sample_data metodunda yeni veri türleri ekleyebilirsiniz
+# in _add_sample_data method you can add new data types
 elif 'custom_collection' in collection_name.lower():
     sample_data = [
         {"field1": "value1", "field2": 123, "created_at": datetime.now()},
-        # Özel verileriniz
+        # your custom data
     ]
 ```
 
-## 🐛 Sorun Giderme
+## 🐛 Troubleshooting
 
-### LM Studio Bağlantı Hatası
-- LM Studio'nun çalıştığından emin olun
-- Port 1234'ün açık olduğunu kontrol edin
-- Model'in yüklendiğini doğrulayın
+### LM Studio Connection Error
+- Ensure LM Studio is running
+- Check port 1234 is open
+- Verify the model is loaded
 
-### MongoDB Bağlantı Hatası
-- MongoDB servisinin çalıştığından emin olun
-- Bağlantı string'ini kontrol edin
-- Firewall ayarlarını kontrol edin
+### MongoDB Connection Error
+- Ensure MongoDB service is running
+- Check the connection string
+- Check firewall settings
 
-### Parsing Hataları
-- LLM model'ini değiştirmeyi deneyin
-- Temperature değerini düşürün
-- Prompt'ları basitleştirin
+### Parsing Errors
+- Try a different LLM model
+- Lower the temperature value
+- Simplify the prompts
 
-## 🤝 Katkıda Bulunma
+## 🤝 Contributing
 
-1. Fork edin
-2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add some AmazingFeature'`)
-4. Branch'inizi push edin (`git push origin feature/AmazingFeature`)
-5. Pull Request oluşturun
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📝 Lisans
+## 📝 License
 
-Bu proje MIT lisansı altında lisanslanmıştır.
+This project is licensed under the MIT License.
 
-## 🙏 Teşekkürler
+## 🙏 Acknowledgements
 
 - [LangChain](https://github.com/langchain-ai/langchain) - Agent framework
-- [LM Studio](https://lmstudio.ai/) - Yerel LLM desteği
-- [MongoDB](https://www.mongodb.com/) - Veritabanı
+- [LM Studio](https://lmstudio.ai/) - Local LLM support
+- [MongoDB](https://www.mongodb.com/) - Database
 - [Flask](https://flask.palletsprojects.com/) - Web framework

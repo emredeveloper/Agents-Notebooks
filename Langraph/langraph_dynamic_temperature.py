@@ -1,26 +1,26 @@
-"""Dinamik sıcaklık (temperature) seçimi demosu.
+"""Dynamic temperature selection demo.
 
-Amaç: Kullanıcı prompt'unun türünü (faktüel, yaratıcı, akıl yürütme, kod, çeviri vb.) basit
-heuristiklerle sınıflandırıp modele verilecek temperature değerini otomatik ayarlamak.
+Goal: Classify the user's prompt type (factual, creative, reasoning, code, translation, etc.)
+with simple heuristics and automatically set the model's temperature.
 
-Örnek strateji:
-- Kısa faktüel / bilgi sorgusu          -> düşük sıcaklık (0.1 - 0.2)
-- Derin akıl yürütme / çok adımlı        -> orta (0.5)
-- Yaratıcı yazı / hikâye / slogan        -> yüksek (0.8 - 0.95)
-- Çeviri isteği                          -> çok düşük (0.0 - 0.15)
-- Kod açıklama / örnek kod               -> düşük-orta (0.2 - 0.35)
+Example strategy:
+- Short factual/info query               -> low temperature (0.1 - 0.2)
+- Deep reasoning / multi-step            -> medium (0.5)
+- Creative writing / story / slogan      -> high (0.8 - 0.95)
+- Translation request                    -> very low (0.0 - 0.15)
+- Code explanation / sample code         -> low-medium (0.2 - 0.35)
 
-Bu dosya aynı prompt'u iki şekilde çalıştırabilir:
-1. Dinamik seçilen sıcaklık
-2. Sabit kullanıcı verilen sıcaklık (karşılaştırma) --compare ile
+This script can run the same prompt in two modes:
+1. Dynamically selected temperature
+2. Fixed temperature provided by the user (with --compare)
 
-Kullanım:
-  python langraph_dynamic_temperature.py --prompt "Kısa bir motivasyon cümlesi yaz" --compare
+Usage:
+  python langraph_dynamic_temperature.py --prompt "Write a short motivational sentence" --compare
 
-İsteğe bağlı env değişkenleri:
-  LG_BASE_URL  (varsayılan http://127.0.0.1:1234/v1)
-  LG_API_KEY   (varsayılan lm-studio)
-  LG_MODEL     (varsayılan google/gemma-3n-e4b)
+Optional env vars:
+  LG_BASE_URL  (default http://127.0.0.1:1234/v1)
+  LG_API_KEY   (default lm-studio)
+  LG_MODEL     (default google/gemma-3n-e4b)
 """
 from __future__ import annotations
 
@@ -40,7 +40,7 @@ from openai import OpenAI, APIConnectionError
 logging.basicConfig(level=os.environ.get("LG_LOG_LEVEL", "INFO"))
 logger = logging.getLogger("langraph_dynamic_temperature")
 
-# Ortak konfig
+# Shared config
 BASE_URL = os.environ.get("LG_BASE_URL", "http://127.0.0.1:1234/v1")
 API_KEY = os.environ.get("LG_API_KEY", "lm-studio")
 MODEL = os.environ.get("LG_MODEL", "google/gemma-3n-e4b")

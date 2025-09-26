@@ -1,110 +1,110 @@
-# 🤖 AI Agents & LangGraph Projeleri (Türkçe)
+# 🤖 AI Agents & LangGraph Projects
 
-Bu repository, modern AI teknolojileri ile geliştirilmiş çeşitli agent sistemleri ve LangGraph workflow örneklerini Türkçe olarak sunar.
+This repository showcases multiple agent systems and LangGraph workflow examples built with modern AI tooling. The documentation and code comments have been converted to English to reflect the latest state of the project.
 
-## 📸 Ekran Görüntüleri
+## 📸 Screenshots
 
 ### 🎥 YouTube QA Agent
 <p align="center">
-  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/image.png" alt="YouTube QA - Sistem Diyagramı" width="900">
+  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/image.png" alt="YouTube QA - System Diagram" width="900">
   <br/>
-  <em>Sistem Diyagramı</em>
+  <em>System Diagram</em>
   <br/><br/>
-  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_46_PM.png" alt="YouTube QA - Ana Sayfa ve Yapılandırma" width="900">
+  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_46_PM.png" alt="YouTube QA - Home & Configuration" width="900">
   <br/>
-  <em>Ana Sayfa ve Yapılandırma</em>
+  <em>Home & Configuration</em>
   <br/><br/>
-  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_50_PM.png" alt="YouTube QA - URL Girişi ve İşleme" width="900">
+  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_50_PM.png" alt="YouTube QA - URL Input & Processing" width="900">
   <br/>
-  <em>YouTube URL Girişi ve İşleme</em>
+  <em>URL Input & Processing</em>
   <br/><br/>
-  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_50_PM%20%281%29.png" alt="YouTube QA - Soru Cevap ve Sonuçlar" width="900">
+  <img src="./Youtube%20Video%20-%20RAG%20-%20Agent/YouTube-QA-Agent-08-22-2025_01_50_PM%20%281%29.png" alt="YouTube QA - Q&A and Results" width="900">
   <br/>
-  <em>Soru-Cevap Arayüzü ve Sonuçlar</em>
+  <em>Q&A Interface and Results</em>
   <br/>
 </p>
 
-### 🤝 A2A-Agent (Çoklu Ajan Demo)
+### 🤝 A2A-Agent (Multi-Agent Demo)
 <p align="center">
-  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_53_PM.png" alt="A2A-Agent - Ekran 1" width="900"><br/>
-  <em>Ekran 1</em><br/><br/>
-  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_54_PM.png" alt="A2A-Agent - Ekran 2" width="900"><br/>
-  <em>Ekran 2</em><br/><br/>
-  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_54_PM%20%281%29.png" alt="A2A-Agent - Ekran 3" width="900"><br/>
-  <em>Ekran 3</em><br/><br/>
-  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_55_PM.png" alt="A2A-Agent - Ekran 4" width="900"><br/>
-  <em>Ekran 4</em><br/>
+  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_53_PM.png" alt="A2A-Agent - Screen 1" width="900"><br/>
+  <em>Screen 1</em><br/><br/>
+  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_54_PM.png" alt="A2A-Agent - Screen 2" width="900"><br/>
+  <em>Screen 2</em><br/><br/>
+  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_54_PM%20%281%29.png" alt="A2A-Agent - Screen 3" width="900"><br/>
+  <em>Screen 3</em><br/><br/>
+  <img src="./A2A-Agent/A2A-Demo-08-22-2025_01_55_PM.png" alt="A2A-Agent - Screen 4" width="900"><br/>
+  <em>Screen 4</em><br/>
 </p>
 
-## 🎥 **Ana Proje: YouTube Video QA Agent**
+## 🎥 Main Project: YouTube Video QA Agent
 
-**En gelişmiş ve güncel proje** - YouTube videolarından transcript çıkarıp akıllı soru-cevap yapabilen modern agent sistemi.
+The most advanced and up-to-date project: extracts transcripts from YouTube videos and enables smart question-answering with a modern UI.
 
-### ✨ **Öne Çıkan Özellikler**
-- 🎬 **YouTube Video İşleme**: Otomatik transcript çıkarma
-- 🧠 **Multi-LLM Support**: LM Studio (yerel) + Google Gemini 2.5
-- 💡 **Ana Fikirler Çıkarımı**: Video'nun 3-5 temel mesajı
-- 🌐 **Modern Streamlit UI**: Web arayüzü + embedded video player
-- 🔍 **Vector Search**: FAISS ile hızlı içerik arama
-- 🇹🇷 **Tam Türkçe Destek**: Arayüz ve çıktılar
+### ✨ Highlights
+- 🎬 YouTube Processing: automatic transcript extraction
+- 🧠 Multi-LLM Support: LM Studio (local) + Google Gemini 2.5
+- 💡 Key Ideas Extraction: 3–5 core takeaways
+- 🌐 Modern Streamlit UI: web interface with embedded player
+- 🔍 Vector Search: FAISS-based fast retrieval
+- 🌎 Full English documentation (UI supports multiple languages roadmap)
 
-### 🚀 **Hızlı Başlangıç**
+### 🚀 Quickstart
 ```bash
 cd "Youtube Video - RAG - Agent"
 streamlit run streamlit_app.py
 ```
 
-📖 **[Detaylı Dokümantasyon →](Youtube%20Video%20-%20RAG%20-%20Agent/README_youtube_qa.md)**
+📖 [Detailed Guide →](Youtube%20Video%20-%20RAG%20-%20Agent/README_youtube_qa.md)
 
-## 🤝 A2A-Agent (Çoklu Ajan Demo)
+## 🤝 A2A-Agent (Multi-Agent Demo)
 
-LM Studio'nun OpenAI uyumlu sunucusunu kullanarak basit bir çoklu ajan (MathAgent, WriterAgent) ve `orchestrator` ile A2A benzeri bir akış sunar.
+Provides a simple multi-agent flow (MathAgent, WriterAgent) with an `orchestrator`, powered by LM Studio's OpenAI-compatible server.
 
-### 🚀 Hızlı Başlangıç (A2A-Agent)
+### 🚀 Quickstart (A2A-Agent)
 ```bash
 cd A2A-Agent
 
-# Ayrı terminallerde çalıştırın
+# Run in separate terminals
 python math_agent.py
 python writer_agent.py
 python orchestrator.py
 ```
 
-📖 **[A2A-Agent Dokümantasyonu →](A2A-Agent/README.md)**
+📖 [A2A-Agent Docs →](A2A-Agent/README.md)
 
 ---
 
-## 🔧 **LangGraph Örnekleri**
+## 🔧 LangGraph Examples
 
-LangGraph kütüphanesi kullanarak çeşitli AI workflow örnekleri:
+Examples built with the LangGraph library.
 
-## Diyagramlar
+## Diagrams
 
-### 1. Temel Akış (`langraph_basic.py`)
+### 1. Basic Flow (`langraph_basic.py`)
 
 ```mermaid
 flowchart LR
-    U[Mesaj] --> LLM[llm_node]
-    LLM --> C{done var mı?}
-    C -->|Hayır| LLM
-    C -->|Evet / MAX_TURN| E[Son]
+    U[Message] --> LLM[llm_node]
+    LLM --> C{is "done" included?}
+    C -->|No| LLM
+    C -->|Yes / MAX_TURN| E[End]
 ```
 
-### 2. Thread / Hafıza (`langraph_stream_memory.py`)
+### 2. Thread / Memory (`langraph_stream_memory.py`)
 
 ```mermaid
 flowchart TB
     subgraph T1[Thread 1]
-        Name[Adım Will] --> G1[Graph]
+        Name[Step Will] --> G1[Graph]
         G1 --> M1[(Memory)]
-        M1 --> A1[Yanıt 1]
-        A1 --> Recall[Adımı hatırlıyor musun?]
+        M1 --> A1[Answer 1]
+        A1 --> Recall[Do you remember the step?]
         Recall --> G1
     end
     subgraph T2[Thread 2]
-        Recall2[Adımı hatırlıyor musun?] --> G2[Graph]
+        Recall2[Do you remember the step?] --> G2[Graph]
         G2 --> M2[(Memory)]
-        M2 --> A2[Yanıt 2]
+        M2 --> A2[Answer 2]
     end
 ```
 
@@ -112,82 +112,82 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    P[Prompt] --> F1[Persona sicak]
-    P --> F2[Persona resmi]
-    P --> F3[Persona egitmen]
-    P --> F4[Persona supheci]
-    F1 --> R1[Yanıt 1]
-    F2 --> R2[Yanıt 2]
-    F3 --> R3[Yanıt 3]
-    F4 --> R4[Yanıt 4]
-    R1 --> COL[Özet Tablo]
+    P[Prompt] --> F1[Warm persona]
+    P --> F2[Formal persona]
+    P --> F3[Instructor persona]
+    P --> F4[Skeptical persona]
+    F1 --> R1[Answer 1]
+    F2 --> R2[Answer 2]
+    F3 --> R3[Answer 3]
+    F4 --> R4[Answer 4]
+    R1 --> COL[Summary Table]
     R2 --> COL
     R3 --> COL
     R4 --> COL
-    COL --> DIFF[Diff Analizi]
+    COL --> DIFF[Diff Analysis]
 ```
 
-### 4. Dinamik Sıcaklık (`langraph_dynamic_temperature.py`)
+### 4. Dynamic Temperature (`langraph_dynamic_temperature.py`)
 
 ```mermaid
 flowchart LR
-    P2[Prompt] --> CLS[Heuristik Sınıflandırma]
-    CLS --> DYN[LLM dinamik]
-    P2 --> FIX[LLM sabit]
-    DYN --> CMP[Karşılaştırma]
+    P2[Prompt] --> CLS[Heuristic Classification]
+    CLS --> DYN[LLM dynamic]
+    P2 --> FIX[LLM fixed]
+    DYN --> CMP[Comparison]
     FIX --> CMP
 ```
 
-## 📁 **Proje Yapısı**
+## 📁 Project Structure
 
 ```
-Agents-Denemeler/
-├── 🎥 Youtube Video - RAG - Agent/      # Ana proje (Streamlit UI)
-│   ├── streamlit_app.py                 # Web arayüzü
+Agents-Notebooks/
+├── 🎥 Youtube Video - RAG - Agent/      # Main project (Streamlit UI)
+│   ├── streamlit_app.py                 # Web interface
 │   ├── youtube_qa_agent.py              # Core agent logic
-│   └── README_youtube_qa.md             # Detaylı dokümantasyon
-├── 🔧 Langraph/                         # LangGraph örnekleri
-│   ├── langraph_basic.py               # Temel akış
-│   ├── langraph_stream_memory.py       # Thread tabanlı hafıza
+│   └── README_youtube_qa.md             # Detailed documentation
+├── 🔧 Langraph/                         # LangGraph examples
+│   ├── langraph_basic.py               # Basic flow
+│   ├── langraph_stream_memory.py       # Threaded memory
 │   ├── langraph_branch_personas.py     # Persona branching
-│   └── langraph_dynamic_temperature.py  # Dinamik sıcaklık
-├── A2A-Agent/                           # A2A benzeri çoklu ajan demo (LM Studio destekli)
-│   ├── orchestrator.py                  # Basit orkestratör
-│   ├── math_agent.py                    # Basit matematik ajanı
-│   ├── writer_agent.py                  # Yazım ajanı (LM Studio)
-│   ├── embedding_agent.py               # Embedding yardımcıları
-│   ├── ui_streamlit.py                  # Opsiyonel UI
-│   ├── common.py                        # Ortak yardımcılar (LM Studio, JSON-RPC)
+│   └── langraph_dynamic_temperature.py  # Dynamic temperature
+├── A2A-Agent/                           # Multi-agent demo (LM Studio)
+│   ├── orchestrator.py                  # Simple orchestrator
+│   ├── math_agent.py                    # Math agent
+│   ├── writer_agent.py                  # Writing agent (LM Studio)
+│   ├── embedding_agent.py               # Embedding helpers
+│   ├── ui_streamlit.py                  # Optional UI
+│   ├── common.py                        # Shared helpers (LM Studio, JSON-RPC)
 │   ├── README.md
-│   └── logs/                            # Log dosyaları
-└── requirements.txt                     # Ortak bağımlılıklar
+│   └── logs/                            # Logs
+└── requirements.txt                     # Shared dependencies
 ```
 
-## 📋 **LangGraph Betikleri Hakkında**
+## 📋 About the LangGraph scripts
 
-1. **`langraph_basic.py`** – Temel akış: kullanıcı mesajı → LLM → döngü ("done" geçerse durur)
-2. **`langraph_stream_memory.py`** – `InMemorySaver` ile thread tabanlı hafıza (farklı `thread_id` = ayrı geçmiş)
-3. **`langraph_branch_personas.py`** – Aynı prompt'u farklı persona'larla paralel çalıştırıp sonuçları renkli diff / yan yana / kelime farkı ile karşılaştırma
-4. **`langraph_dynamic_temperature.py`** – Prompt türünü sınıflandırıp sıcaklığı (temperature) otomatik seçer; isteğe bağlı sabit sıcaklık karşılaştırması
+1. `langraph_basic.py` – Basic loop: user message → LLM → repeat (stops if response contains "done")
+2. `langraph_stream_memory.py` – Thread-based memory with `InMemorySaver` (`thread_id` isolates conversation history)
+3. `langraph_branch_personas.py` – Run the same prompt across different personas, then compare results (diff modes)
+4. `langraph_dynamic_temperature.py` – Classify prompt type and select temperature automatically; optional comparison vs fixed temp
 
-## 🚀 **Hızlı Başlangıç**
+## 🚀 Quickstart
 
-### 🎥 **YouTube QA Agent (Ana Proje)**
+### 🎥 YouTube QA Agent (Main Project)
 
 ```bash
-# Ana projeye git
+# Go to the main project
 cd "Youtube Video - RAG - Agent"
 
-# Streamlit uygulamasını başlat
+# Start the Streamlit app
 streamlit run streamlit_app.py
 ```
 
-Tarayıcıda `http://localhost:8501` açılır.
+Open `http://localhost:8501` in your browser.
 
-### 🔧 **LangGraph Örnekleri (Windows cmd.exe)**
+### 🔧 LangGraph Examples (Windows cmd.exe)
 
-#### Ortam Kurulumu
-Sanal ortamını (örn. `.venv`) aktifleştir ve gerekli ortam değişkenlerini ayarla:
+#### Environment
+Activate your virtual environment (e.g., `.venv`) and set env variables:
 
 ```cmd
 set LG_BASE_URL=http://127.0.0.1:1234/v1
@@ -195,142 +195,137 @@ set LG_API_KEY=lm-studio
 set LG_MODEL=google/gemma-3n-e4b
 ```
 
-#### Paket Kurulumu
+#### Install dependencies
 ```cmd
 pip install -r requirements.txt
 ```
 
-#### Temel Örneği Çalıştırma
+#### Run the basic example
 ```cmd
 cd Langraph
 python langraph_basic.py
 ```
 
-### Genel Özellikler
+### General Features
 
-- Ortam değişkeni ile yapılandırma (model, base URL, API key)
-- Geçici bağlantı hatalarına yeniden deneme (retry)
-- Mesaj rolleri doğru eşleme (user / assistant / system / tool)
-- Maksimum tur sınırı (sonsuz döngü engeli)
-- Günlük (logging) ile izlenebilirlik
+- Configurable via env vars (model, base URL, API key)
+- Retry for transient failures
+- Proper role mapping (user / assistant / system / tool)
+- Maximum turn limit (prevents infinite loops)
+-,Logging for observability
 
-## Thread / Hafıza Örneği
+## Thread / Memory Example
 
-**Betik:** `langraph_stream_memory.py`
+Script: `langraph_stream_memory.py`
 
-**Amaç:** Aynı uygulamada farklı oturumları (thread) izole etmek. `thread_id=1` kullanıcının ismini hatırlar, `thread_id=2` temiz başlar.
+Goal: Isolate multiple sessions (threads) in the same app. For example, `thread_id=1` remembers the user name, `thread_id=2` starts fresh.
 
-**Çalıştır:**
+Run:
 ```cmd
 python langraph_stream_memory.py
 ```
 
-## Persona Branching (Karşılaştırmalı) Örneği
+## Persona Branching (Comparative) Example
 
-**Betik:** `langraph_branch_personas.py`
+Script: `langraph_branch_personas.py`
 
-**Ne yapar:** Tek bir prompt'u tanımlı persona'lara paralel yollayıp çıktıların:
-- Bir özet tablosunu
-- Seçilen moda göre farklarını
+What it does: Sends the same prompt to defined personas in parallel and shows:
+- A summary table
+- Differences in the selected diff mode
 
-gösterir.
+### Diff Modes (`--diff-mode`)
 
-### Diff Modları (`--diff-mode`)
+- `unified`: Classic line-based
+- `side`: Side-by-side
+- `words`: Word-level
+- `all`: All of the above
 
-- `unified` : Klasik satır bazlı (eklenen yeşil, silinen kırmızı)
-- `side` : Yan yana satırlar
-- `words` : Kelime düzeyinde eklenen / silinen
-- `all` : Hepsi birden
+### Other Flags
 
-### Diğer Bayraklar
+- `--no-diff`: Skip diffs (only summary)
+- `--strict-turkish`: Warn if non-English leaks into output
+- `--max-preview-chars N`: Summary clipping length
 
-- `--no-diff` : Farkları gösterme (sadece özet tablo)
-- `--strict-turkish` : İngilizce sızıntısı varsa uyarı
-- `--max-preview-chars N` : Özet tablo kesme uzunluğu
-
-### Örnek Kullanım
+### Example
 
 ```cmd
-python langraph_branch_personas.py --prompt "Kısa bir motivasyon cümlesi yaz" --diff-mode side --strict-turkish
+python langraph_branch_personas.py --prompt "Write a short motivational sentence" --diff-mode side --strict-turkish
 ```
 
-**Persona kimlikleri (Türkçe üretim):** `sicak`, `resmi`, `egitmen`, `supheci`
+Personas: `warm`, `formal`, `instructor`, `skeptical`
 
-## Dinamik Sıcaklık (Temperature) Örneği
+## Dynamic Temperature Example
 
-**Betik:** `langraph_dynamic_temperature.py`
+Script: `langraph_dynamic_temperature.py`
 
-**Mantık:** Prompt içeriğini heuristiklerle sınıflandırır:
-- çeviri / yaratıcı / akıl yürütme / kod / faktüel / genel
+Logic: Classify the prompt (translation / creative / reasoning / code / factual / general) and select a temperature automatically. Optionally compare with a fixed temperature.
 
-ve buna göre bir sıcaklık seçer. İstersen sabit sıcaklıkla karşılaştırma yapar.
-
-### Örnek Kullanım
+### Example
 
 ```cmd
-python langraph_dynamic_temperature.py --prompt "Kısa bir motivasyon cümlesi yaz" --show-rationale --compare
+python langraph_dynamic_temperature.py --prompt "Write a short motivational sentence" --show-rationale --compare
 ```
 
-### Bayraklar
+### Flags
 
-- `--show-rationale` : Sınıflandırma gerekçesini yazdır
-- `--compare` : Dinamik vs sabit çıktı
-- `--fixed-temperature 0.7` : Karşılaştırma için sabit değer
+- `--show-rationale`: Print classification rationale
+- `--compare`: Compare dynamic vs fixed
+- `--fixed-temperature 0.7`: Fixed value for comparison
 
-## Yerel Model Kullanmıyorsanız
+## Not using a local model?
 
-`LG_BASE_URL` değerini erişilebilir bir OpenAI-uyumlu son noktaya yönlendirin (örn. bir bulut servis ya da LM Studio). `LG_API_KEY` değerini de o servisin anahtarıyla değiştirin.
+Point `LG_BASE_URL` to any OpenAI-compatible endpoint (e.g., LM Studio or a cloud service), and set `LG_API_KEY` accordingly.
 
-## 🌟 **Önerilen Geliştirmeler**
+## 🌟 Roadmap
 
-### 🎥 **YouTube QA Agent**
-- [x] ✅ **Streamlit UI** - Tamamlandı
-- [x] ✅ **Ana Fikirler Çıkarımı** - Tamamlandı  
-- [x] ✅ **Multi-LLM Support** - Tamamlandı
-- [ ] 🔄 **A2A Protocol Entegrasyonu** - Devam ediyor
-- [ ] 📊 **Video Timeline Navigation**
-- [ ] 📤 **Export Features** (PDF/Word)
-- [ ] 🌍 **Multi-language Support**
+### 🎥 YouTube QA Agent
+- [x] Streamlit UI
+- [x] Key Ideas extraction
+- [x] Multi-LLM support
+- [ ] A2A protocol integration
+- [ ] Video timeline navigation
+- [ ] Export features (PDF/Word)
+- [ ] Multi-language support
 
-### 🔧 **LangGraph Örnekleri**
-- [ ] 💾 Kalıcı hafıza (SQLite / dosya) ekleme
-- [ ] 🔍 Vektör hafıza & özetleme
-- [ ] 📝 JSON/CSV çıktı loglama
-- [ ] 🚀 FastAPI arayüzü
-- [ ] 📋 Persona tanımlarını harici YAML'den yükleme
+### 🔧 LangGraph Examples
+- [ ] Persistent memory (SQLite / file)
+- [ ] Vector memory & summarization
+- [ ] JSON/CSV logging
+- [ ] FastAPI interface
+- [ ] Load personas from external YAML
 
-## 🤝 **Katkıda Bulunma**
+## 🤝 Contributing
 
-### 🎯 **Nasıl Katkıda Bulunurum?**
-1. **Fork yapın** ve feature branch oluşturun
-2. **Kod değişikliklerinizi** commit edin
-3. **Pull Request** açın
-4. **Issue'lar** açarak özellik önerilerinde bulunun
+### How to contribute
+1. Fork and create a feature branch
+2. Commit your changes
+3. Open a Pull Request
+4. Open issues for feature ideas
 
-### 📋 **Katkı Alanları**
-- 🐛 **Bug Fixes**: Hata düzeltmeleri
-- ✨ **New Features**: Yeni özellikler
-- 📚 **Documentation**: Dokümantasyon iyileştirmeleri
-- 🎨 **UI/UX**: Arayüz geliştirmeleri
-- 🧪 **Testing**: Test senaryoları
+### Areas
+- Bug fixes
+- New features
+- Documentation
+- UI/UX
+- Testing
 
-### 🔧 **Geliştirme Ortamı**
-- **Python 3.8+** gerekli
-- **Virtual environment** kullanımı önerilir
-- **Code formatting**: Black, isort kullanın
+### Dev environment
+- Python 3.8+
+- Use a virtual environment
+- Code formatting: Black, isort
 
 ---
 
-## 📝 **Notlar**
+## Notes
 
-- **Windows cmd.exe**: `set DEGISKEN="deger"` formatı
-- **PowerShell**: `$env:DEGISKEN="deger"` formatı  
-- **Linux/Mac**: `export DEGISKEN="deger"` formatı
+- Windows cmd.exe: `set VARIABLE="value"`
+- PowerShell: `$env:VARIABLE="value"`  
+- Linux/Mac: `export VARIABLE="value"`
 
-## 🏷️ **Teknoloji Stack**
+## 🏷️ Tech Stack
 
-- **🐍 Backend**: Python, LangGraph, LangChain
-- **🤖 LLM**: LM Studio, Google Gemini
-- **🌐 Frontend**: Streamlit, HTML/CSS
-- **🔍 Vector DB**: FAISS
-- **📹 Video**: YouTube Transcript API, PyTube
+- Backend: Python, LangGraph, LangChain
+- LLM: LM Studio, Google Gemini
+- Frontend: Streamlit, HTML/CSS
+- Vector DB: FAISS
+- Video: YouTube Transcript API, PyTube
