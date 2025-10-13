@@ -261,24 +261,30 @@ ARAŞTIRMA GEREKSİNİMLERİ:
                 start = text.find("{")
                 end = text.rfind("}") + 1
                 json_str = text[start:end] if start != -1 and end > start else "{}"
-            
+
             parsed_result = json.loads(json_str)
-            
+
             # Grounding'den gelen kaynakları ekle
             if sources:
                 parsed_result['sources'] = sources[:3] + parsed_result.get('sources', [])[:2]
-            
-        except:
-            parsed_result = {
-                "summary": text[:300] if text else "Araştırma tamamlandı",
-                "key_findings": [
-                    "Google Search ile gerçek arama yapıldı",
-                    f"'{query}' konusunda güncel bilgi toplandı",
-                    "Gemini 2.0 Flash Lite ile analiz edildi"
-                ],
-                "detailed_analysis": text[:1000] if text else "Araştırma tamamlandı.",
-                "sources": sources if sources else ["Google Search"],
-                "recommendations": ["Daha spesifik sorular sorun"]
+
+        except json.JSONDecodeError as e:
+            # JSON parsing başarısız - gerçek hata döndür
+            return {
+                "status": "error",
+                "error": f"JSON parsing failed: {str(e)}",
+                "raw_response": text[:1000],  # Debugging için
+                "query": query,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+        except Exception as e:
+            # Diğer beklenmedik hatalar
+            return {
+                "status": "error",
+                "error": f"Unexpected error during parsing: {str(e)}",
+                "raw_response": text[:1000],
+                "query": query,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         
         return {
@@ -378,13 +384,23 @@ NOT: Gerçek Python kodu çalıştır ve sonuçları raporla!
                 end = text.rfind("}") + 1
                 json_str = text[start:end] if start != -1 and end > start else "{}"
             parsed_result = json.loads(json_str)
-        except:
-            parsed_result = {
-                "summary": text[:500] if text else "Veri analizi tamamlandı",
-                "statistics": {"note": "Code execution ile hesaplandı"},
-                "insights": ["Python kodu çalıştırıldı", "Gerçek hesaplamalar yapıldı"],
-                "visualizations": ["Histogram", "Scatter plot"],
-                "recommendations": [text[:300] if text else "Veri kalitesini artırın"]
+        except json.JSONDecodeError as e:
+            # JSON parsing başarısız - gerçek hata döndür
+            return {
+                "status": "error",
+                "error": f"JSON parsing failed: {str(e)}",
+                "raw_response": text[:1000],  # Debugging için
+                "data_description": data_description,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+        except Exception as e:
+            # Diğer beklenmedik hatalar
+            return {
+                "status": "error",
+                "error": f"Unexpected error during parsing: {str(e)}",
+                "raw_response": text[:1000],
+                "data_description": data_description,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         
         return {
@@ -624,13 +640,23 @@ ANALİZ GEREKSİNİMLERİ:
                 end = text.rfind("}") + 1
                 json_str = text[start:end] if start != -1 and end > start else "{}"
             parsed_result = json.loads(json_str)
-        except:
-            parsed_result = {
-                "summary": text[:500] if text else "Doküman analiz edildi",
-                "key_points": ["Doküman işlendi", "Gemini ile analiz edildi"],
-                "entities": ["Otomatik çıkarıldı"],
-                "sentiment": "Nötr",
-                "recommendations": [text[:300] if text else "Detaylı inceleme yapın"]
+        except json.JSONDecodeError as e:
+            # JSON parsing başarısız - gerçek hata döndür
+            return {
+                "status": "error",
+                "error": f"JSON parsing failed: {str(e)}",
+                "raw_response": text[:1000],  # Debugging için
+                "document_description": document_description,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+        except Exception as e:
+            # Diğer beklenmedik hatalar
+            return {
+                "status": "error",
+                "error": f"Unexpected error during parsing: {str(e)}",
+                "raw_response": text[:1000],
+                "document_description": document_description,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         
         return {
@@ -755,17 +781,25 @@ NOT: Gerçek {language} kodu yaz ve çalıştır! Test framework: {spec['testing
                 end = text.rfind("}") + 1
                 json_str = text[start:end] if start != -1 and end > start else "{}"
             parsed_result = json.loads(json_str)
-        except:
-            code_match = text
-            if f"```{language}" in text:
-                code_match = text.split(f"```{language}")[1].split("```")[0].strip()
-            
-            parsed_result = {
-                "code": code_match[:1000] if code_match else text[:1000],
-                "explanation": "Kod code execution ile test edildi",
-                "complexity": "O(n)",
-                "test_cases": ["Test edildi"],
-                "improvements": ["Optimize edilebilir"]
+        except json.JSONDecodeError as e:
+            # JSON parsing başarısız - gerçek hata döndür
+            return {
+                "status": "error",
+                "error": f"JSON parsing failed: {str(e)}",
+                "raw_response": text[:1000],  # Debugging için
+                "task_description": task_description,
+                "language": language,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+        except Exception as e:
+            # Diğer beklenmedik hatalar
+            return {
+                "status": "error",
+                "error": f"Unexpected error during parsing: {str(e)}",
+                "raw_response": text[:1000],
+                "task_description": task_description,
+                "language": language,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         
         return {
@@ -1045,47 +1079,76 @@ with tab1:
                 with st.spinner(f"🤖 {selected_agent['name']} çalışıyor..."):
                     progress = st.progress(0)
                     status = st.empty()
-                    
-                    status.text("Görev işleniyor...")
-                    progress.progress(30)
-                    
-                    # Agent'ı çalıştır
-                    result = execute_agent_task(
-                        agent_type,
-                        task_params,
-                        st.session_state.gemini_api_key
-                    )
-                    
-                    progress.progress(80)
-                    
-                    # Sonucu kaydet
-                    st.session_state.task_results.append(result)
-                    
-                    # Agent istatistiklerini güncelle
-                    selected_agent['tasks_completed'] += 1
-                    
-                    # Log ekle
-                    st.session_state.execution_logs.append({
-                        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "agent": selected_agent['name'],
-                        "action": "Görev Tamamlandı" if result['status'] == 'success' else "Görev Başarısız",
-                        "details": result.get('framework', 'N/A')
-                    })
-                    
-                    progress.progress(100)
-                    status.text("✅ Tamamlandı!")
-                    time.sleep(0.5)
-                    
-                    if result['status'] == 'success':
-                        st.success("✅ Görev başarıyla tamamlandı!")
-                    else:
-                        st.error(f"❌ Hata: {result.get('error', 'Bilinmeyen hata')}")
-                    
-                    st.rerun()
+
+                    try:
+                        status.text("Görev işleniyor...")
+                        progress.progress(30)
+
+                        # Agent'ı çalıştır
+                        result = execute_agent_task(
+                            agent_type,
+                            task_params,
+                            st.session_state.gemini_api_key
+                        )
+
+                        # Önce session state'i güncelle
+                        st.session_state.task_results.append(result)
+                        st.session_state.execution_logs.append({
+                            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            "agent": selected_agent['name'],
+                            "action": "Görev Tamamlandı" if result['status'] == 'success' else "Görev Başarısız",
+                            "details": result.get('framework', 'N/A')
+                        })
+                        selected_agent['tasks_completed'] += 1
+
+                        progress.progress(100)
+                        status.text("✅ Tamamlandı!")
+                        time.sleep(0.5)
+
+                        if result['status'] == 'success':
+                            st.success("✅ Görev başarıyla tamamlandı!")
+                        else:
+                            st.error(f"❌ Agent Hatası: {result.get('error', 'Bilinmeyen hata')}")
+                            # Hata durumunda da debug bilgilerini göster
+                            with st.expander("🔍 Hata Detayları"):
+                                st.json({
+                                    "error": result.get('error'),
+                                    "agent_type": result.get('agent_type'),
+                                    "framework": result.get('framework'),
+                                    "raw_response": result.get('raw_response', 'N/A')[:500] + "..."
+                                })
+
+                        st.rerun()
+
+                    except Exception as e:
+                        progress.progress(100)
+                        status.text("❌ Hata!")
+                        st.error(f"❌ Sistem Hatası: {str(e)}")
+                        # Hata durumunda da kaydet
+                        error_result = {
+                            "status": "error",
+                            "error": f"Sistem hatası: {str(e)}",
+                            "agent_type": agent_type,
+                            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        }
+                        st.session_state.task_results.append(error_result)
 
 # TAB 2: Sonuçlar
 with tab2:
     st.header("📊 Görev Sonuçları")
+
+    # Debug bilgileri (geçici)
+    st.write("🔍 DEBUG BİLGİLERİ:")
+    st.write(f"Task Results: {len(st.session_state.task_results)}")
+    st.write(f"Agents: {len(st.session_state.agents)}")
+    st.write(f"Logs: {len(st.session_state.execution_logs)}")
+
+    if st.session_state.task_results:
+        for i, result in enumerate(st.session_state.task_results):
+            st.write(f"Result {i}: {result.get('status', 'N/A')} - {result.get('agent_type', 'N/A')}")
+
+    if not st.session_state.task_results:
+        st.warning("⚠️ Henüz hiç görev sonucu yok. İlk görevi çalıştırın!")
     
     if st.session_state.task_results:
         for idx, result in enumerate(reversed(st.session_state.task_results)):
