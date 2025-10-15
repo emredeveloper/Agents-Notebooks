@@ -155,7 +155,7 @@ def run_query(query: str) -> None:
 if __name__ == "__main__":
     import sys
 
-    GROQ_API_KEY  = "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"
+    GROQ_API_KEY  = ""
     os.environ["GROQ_API_KEY"] = GROQ_API_KEY
     query = " ".join(sys.argv[1:]).strip() or "Python ML kütüphaneleri nelerdir?"
     run_query(query)

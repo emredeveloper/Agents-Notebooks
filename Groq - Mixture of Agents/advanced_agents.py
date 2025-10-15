@@ -30,7 +30,7 @@ def print_section(title: str):
 def print_panel(text: str, title: Optional[str] = None, style: str = ""): 
     print(Panel.fit(text, title=title, border_style=style or "cyan"))
 
-GROQ_API_KEY  = "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"
+GROQ_API_KEY  = ""
 os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 
 # ============================================================================
