@@ -1,0 +1,17 @@
+# Google Generative AI SDK (modern version)
+google-genai>=0.2.0
+
+# Web scraping and HTTP requests
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Timezone support
+pytz>=2023.3
+
+# Rich console output
+rich>=13.0.0
+
+# Optional: Better search results (use new package name)
+# Install either duckduckgo-search OR ddgs (ddgs is the new name)
+duckduckgo-search>=4.0.0; python_version < "3.13"
+ddgs>=0.1.0; python_version >= "3.13"
