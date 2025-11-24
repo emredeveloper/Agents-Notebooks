@@ -98,7 +98,7 @@ Select a prompt (1-5) or 'q' to quit:
 
 ### Example Input Image
 
-![Example Image](arch.png)
+<img src="arch.png" alt="Example Input Image" width="600"/>
 
 ### Layout Analysis Output
 
@@ -110,7 +110,7 @@ Select a prompt (1-5) or 'q' to quit:
 
 ### Layout Analysis Visualization
 
-![Layout Analysis Visualization](visualized_layout_analysis.png)
+<img src="visualized_layout_analysis.png" alt="Layout Analysis Visualization" width="600"/>
 
 ### Extract Text Output
 
