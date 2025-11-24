@@ -27,7 +27,7 @@ def example_basic_analysis():
     print("=" * 60)
     
     # Set API key (or get from environment variable)
-    api_key = "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"
+    api_key = "your key"
     if not api_key:
         print("⚠️  OPENROUTER_API_KEY environment variable is not set!")
         return
@@ -36,7 +36,7 @@ def example_basic_analysis():
     agent = VideoUnderstandingAgent(api_key=api_key)
     
     # Example video URL (you can use your own video URL)
-    video_url = "https://www.youtube.com/watch?v=XDzhP93M5o4"  # Example
+    video_url = "video url"  # Example
     
     # Analyze video - Analyze only first 1 minute and predict about remaining parts
     result = agent.understand_video(
@@ -73,7 +73,7 @@ def example_detailed_analysis():
     
     agent = VideoUnderstandingAgent(api_key=api_key)
     
-    video_url = "https://www.youtube.com/watch?v=XDzhP93M5o4"  # Example
+    video_url = "video url"  # Example
     
     # Comprehensive analysis
     result = agent.analyze_video_detailed(
