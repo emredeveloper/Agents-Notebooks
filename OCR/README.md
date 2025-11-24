@@ -96,6 +96,10 @@ Select a prompt (1-5) or 'q' to quit:
 
 ## 📊 Example Outputs
 
+### Example Input Image
+
+![Example Image](arch.png)
+
 ### Layout Analysis Output
 
 ```
@@ -103,6 +107,8 @@ Select a prompt (1-5) or 'q' to quit:
 
 <|ref|>image<|/ref|><|det|>[[34, 199, 974, 922]]<|/det|>
 ```
+
+### Layout Analysis Visualization
 
 ![Layout Analysis Visualization](visualized_layout_analysis.png)
 
