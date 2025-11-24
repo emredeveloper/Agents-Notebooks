@@ -1,0 +1,47 @@
+Universal segmentation model
+
+valid masks
+
+confidence
+
+score
+
+image
+
+lightweight
+
+confidence
+
+encoder
+
+mask decoder
+
+score
+
+image
+
+confidence
+
+score
+
+image
+
+prompt encoder
+
+embeddings
+
+down
+
+(x,y,fg/bg)
+
+sample
+
+(x1,y1),(x2y2)
+
+mask
+
+points
+
+box
+
+text
