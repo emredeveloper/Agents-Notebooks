@@ -90,6 +90,8 @@ Agno/tmp/
 !README*.txt
 !LICENSE*.txt
 !requirements*.txt
+!OCR/*.pdf
+!OCR/*.txt
 
 # ---- Media Files ----
 *.png
@@ -104,6 +106,9 @@ Agno/tmp/
 *.wav
 *.avi
 *.mov
+!OCR/*.png
+!OCR/*.jpg
+!OCR/*.jpeg
 
 # ---- Archive Files ----
 *.zip
