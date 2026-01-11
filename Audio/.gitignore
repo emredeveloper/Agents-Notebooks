@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Audio files (test files)
+test_audios/
+*.mp3
+*.wav
+*.flac
+
+# Model cache
+.cache/
+models/
+*.pt
+*.pth
+*.bin
+
+# Logs
+*.log
+*.log.*
+
+# Temporary files
+*.tmp
+temp/
+tmp/
+
+# Gradio
+flagged/
+logs/
+gradio_cached_examples/
+
+# Sensitive data
+config.json
+secrets.json
+*.key
+*.pem

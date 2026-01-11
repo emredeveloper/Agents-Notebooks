@@ -1,0 +1,24 @@
+# 🎙️ Turkish Voice Assistant - Requirements
+# ==========================================
+
+# Whisper & Transformers
+transformers>=4.40.0
+torch>=2.0.0
+accelerate>=0.27.0
+
+# Audio processing
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# Web search
+duckduckgo-search>=6.0.0
+
+# HTTP requests (LM Studio API)
+requests>=2.31.0
+
+# Gradio interface
+gradio>=4.44.0
+
+# Utilities
+numpy>=1.24.0
+openai>=1.0.0
