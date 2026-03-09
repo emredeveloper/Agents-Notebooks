@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Context Manager | 6 Types of Context</title>
+    <meta name="description" content="Interactive AI Agent Context Manager implementing 6 types of context: Instructions, Tools, Memory, Knowledge, Examples, and Tool Results.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="url(#logoGrad)" stroke-width="2.5"/>
+                        <circle cx="16" cy="16" r="6" fill="url(#logoGrad)" opacity="0.8"/>
+                        <circle cx="16" cy="6" r="2.5" fill="#7c5cfc"/>
+                        <circle cx="24.5" cy="11" r="2.5" fill="#00d4aa"/>
+                        <circle cx="24.5" cy="21" r="2.5" fill="#ff6b9d"/>
+                        <circle cx="16" cy="26" r="2.5" fill="#ffa63e"/>
+                        <circle cx="7.5" cy="21" r="2.5" fill="#3b82f6"/>
+                        <circle cx="7.5" cy="11" r="2.5" fill="#06d6a0"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32">
+                                <stop stop-color="#7c5cfc"/>
+                                <stop offset="1" stop-color="#00d4aa"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="logo-title">AI Agent Context</h1>
+                    <p class="logo-subtitle">6 Types of Context • Ollama</p>
+                </div>
+            </div>
+            <div class="header-status">
+                <div class="model-badge" id="modelBadge">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="modelName">lfm2-8B-A1B</span>
+                </div>
+                <button class="btn-icon" onclick="toggleDarkMode()" title="Toggle Theme">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="main-layout">
+        <!-- Sidebar - Context Types -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Context Types</h3>
+                <nav class="context-nav">
+                    <button class="ctx-btn active" data-panel="instructions" onclick="switchPanel('instructions')">
+                        <div class="ctx-btn-icon" style="--accent: #7c5cfc">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        </div>
+                        <div class="ctx-btn-text">
+                            <span class="ctx-btn-title">Instructions</span>
+                            <span class="ctx-btn-desc">Role, Objective, Requirements</span>
+                        </div>
+                    </button>
+                    <button class="ctx-btn" data-panel="tools" onclick="switchPanel('tools')">
+                        <div class="ctx-btn-icon" style="--accent: #ff6b9d">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        </div>
+                        <div class="ctx-btn-text">
+                            <span class="ctx-btn-title">Tools</span>
+                            <span class="ctx-btn-desc">Parameters, Description</span>
+                        </div>
+                    </button>
+                    <button class="ctx-btn" data-panel="memory" onclick="switchPanel('memory')">
+                        <div class="ctx-btn-icon" style="--accent: #ffa63e">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22l-.75-12.07A4.001 4.001 0 0 1 12 2z"/><circle cx="12" cy="6" r="1"/></svg>
+                        </div>
+                        <div class="ctx-btn-text">
+                            <span class="ctx-btn-title">Memory</span>
+                            <span class="ctx-btn-desc">Long-term, Short-term</span>
+                        </div>
+                    </button>
+                    <button class="ctx-btn" data-panel="knowledge" onclick="switchPanel('knowledge')">
+                        <div class="ctx-btn-icon" style="--accent: #3b82f6">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        </div>
+                        <div class="ctx-btn-text">
+                            <span class="ctx-btn-title">Knowledge</span>
+                            <span class="ctx-btn-desc">External, Task Context</span>
+                        </div>
+                    </button>
+                    <button class="ctx-btn" data-panel="examples" onclick="switchPanel('examples')">
+                        <div class="ctx-btn-icon" style="--accent: #06d6a0">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                        </div>
+                        <div class="ctx-btn-text">
+                            <span class="ctx-btn-title">Examples</span>
+                            <span class="ctx-btn-desc">Behavior, Responses</span>
+                        </div>
+                    </button>
+                    <button class="ctx-btn" data-panel="toolresults" onclick="switchPanel('toolresults')">
+                        <div class="ctx-btn-icon" style="--accent: #00d4aa">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <div class="ctx-btn-text">
+                            <span class="ctx-btn-title">Tool Results</span>
+                            <span class="ctx-btn-desc">Execution outputs</span>
+                        </div>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">Active Context</h3>
+                <div class="context-toggles" id="contextToggles">
+                    <label class="toggle-row">
+                        <input type="checkbox" checked data-ctx="instructions" onchange="updateContextConfig()">
+                        <span class="toggle-label">Instructions</span>
+                    </label>
+                    <label class="toggle-row">
+                        <input type="checkbox" checked data-ctx="tools" onchange="updateContextConfig()">
+                        <span class="toggle-label">Tools</span>
+                    </label>
+                    <label class="toggle-row">
+                        <input type="checkbox" checked data-ctx="memory" onchange="updateContextConfig()">
+                        <span class="toggle-label">Memory</span>
+                    </label>
+                    <label class="toggle-row">
+                        <input type="checkbox" checked data-ctx="knowledge" onchange="updateContextConfig()">
+                        <span class="toggle-label">Knowledge</span>
+                    </label>
+                    <label class="toggle-row">
+                        <input type="checkbox" checked data-ctx="examples" onchange="updateContextConfig()">
+                        <span class="toggle-label">Examples</span>
+                    </label>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="previewContext()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Preview Full Context
+                </button>
+            </div>
+        </aside>
+
+        <!-- Center Content -->
+        <div class="content-area">
+            <!-- Configuration Panels -->
+            <div class="panels-container" id="panelsContainer">
+
+                <!-- Instructions Panel -->
+                <div class="panel active" id="panel-instructions">
+                    <div class="panel-header">
+                        <div class="panel-title-area">
+                            <div class="panel-icon" style="--accent: #7c5cfc">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            </div>
+                            <div>
+                                <h2 class="panel-title">Instructions</h2>
+                                <p class="panel-desc">Configure the agent's role, objective, and requirements</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    Role (Who)
+                                </label>
+                                <input type="text" id="inst-role" class="form-input" placeholder="e.g., PM, Coding Agent, Market Researcher">
+                                <span class="form-hint">Encourage the LLM to act as a persona</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Role Description</label>
+                                <textarea id="inst-role-desc" class="form-textarea" rows="3" placeholder="Describe the role in detail..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    Objective
+                                </label>
+                                <textarea id="inst-objective" class="form-textarea" rows="2" placeholder="What are we trying to achieve? (desired outcomes, deliverables, success criteria)"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Motivation (Why is it important?)</label>
+                                <input type="text" id="inst-motivation" class="form-input" placeholder="Motivation, larger goal, business value">
+                            </div>
+                        </div>
+
+                        <div class="section-divider">
+                            <span>Requirements (How)</span>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Steps (reasoning, tasks, actions)</label>
+                                <div id="inst-steps-list" class="tag-list"></div>
+                                <div class="input-with-btn">
+                                    <input type="text" id="inst-step-input" class="form-input" placeholder="Add a step...">
+                                    <button class="btn btn-sm btn-accent" onclick="addToList('inst-steps', 'inst-step-input')">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Conventions (style, tone, coding rules)</label>
+                                <div id="inst-conventions-list" class="tag-list"></div>
+                                <div class="input-with-btn">
+                                    <input type="text" id="inst-convention-input" class="form-input" placeholder="Add a convention...">
+                                    <button class="btn btn-sm btn-accent" onclick="addToList('inst-conventions', 'inst-convention-input')">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Constraints (performance, security, regulatory)</label>
+                                <div id="inst-constraints-list" class="tag-list"></div>
+                                <div class="input-with-btn">
+                                    <input type="text" id="inst-constraint-input" class="form-input" placeholder="Add a constraint...">
+                                    <button class="btn btn-sm btn-accent" onclick="addToList('inst-constraints', 'inst-constraint-input')">+</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Response Format</label>
+                                <select id="inst-format" class="form-select">
+                                    <option value="plain text">Plain Text</option>
+                                    <option value="JSON">JSON</option>
+                                    <option value="XML">XML</option>
+                                    <option value="Markdown">Markdown</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="panel-actions">
+                            <button class="btn btn-primary" onclick="saveInstructions()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                Save Instructions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tools Panel -->
+                <div class="panel" id="panel-tools">
+                    <div class="panel-header">
+                        <div class="panel-title-area">
+                            <div class="panel-icon" style="--accent: #ff6b9d">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                            </div>
+                            <div>
+                                <h2 class="panel-title">Tools</h2>
+                                <p class="panel-desc">Define tools the agent can use. Tool descriptions act as micro-prompts.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="info-banner">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <span>Tools consume input tokens. Treat descriptions as micro-prompts that guide the agent's reasoning.</span>
+                        </div>
+
+                        <div id="tools-list" class="items-list"></div>
+
+                        <div class="add-form collapsed" id="add-tool-form">
+                            <button class="btn btn-outline" onclick="toggleAddForm('add-tool-form')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add New Tool
+                            </button>
+                            <div class="add-form-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Tool Name</label>
+                                        <input type="text" id="tool-name" class="form-input" placeholder="e.g., web_search">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Description</label>
+                                        <textarea id="tool-desc" class="form-textarea" rows="2" placeholder="What the tool does..."></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">What it does</label>
+                                        <input type="text" id="tool-what" class="form-input" placeholder="Detailed explanation">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">How to use</label>
+                                        <input type="text" id="tool-how" class="form-input" placeholder="Usage instructions">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Return value</label>
+                                        <input type="text" id="tool-return" class="form-input" placeholder="What it returns">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-sm" onclick="addTool()">Save Tool</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memory Panel -->
+                <div class="panel" id="panel-memory">
+                    <div class="panel-header">
+                        <div class="panel-title-area">
+                            <div class="panel-icon" style="--accent: #ffa63e">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 22l-.75-12.07A4.001 4.001 0 0 1 12 2z"/><circle cx="12" cy="6" r="1"/></svg>
+                            </div>
+                            <div>
+                                <h2 class="panel-title">Memory</h2>
+                                <p class="panel-desc">Long-term memory stored in database. Short-term memory is the chat history.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="memory-types">
+                            <div class="memory-type-card">
+                                <div class="memory-type-header">
+                                    <h3>🧠 Long-term Memory</h3>
+                                    <span class="badge">Persistent</span>
+                                </div>
+                                <p class="memory-type-desc">Stored in database or file system. Persists across sessions.</p>
+
+                                <div class="memory-subtypes">
+                                    <div class="memory-subtype">
+                                        <h4>Semantic</h4>
+                                        <span class="subtype-desc">Facts, preferences, user/company knowledge</span>
+                                    </div>
+                                    <div class="memory-subtype">
+                                        <h4>Episodic</h4>
+                                        <span class="subtype-desc">Experiences, past interactions</span>
+                                    </div>
+                                    <div class="memory-subtype">
+                                        <h4>Procedural</h4>
+                                        <span class="subtype-desc">Instructions captured from previous interactions</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="memory-type-card short-term">
+                                <div class="memory-type-header">
+                                    <h3>⚡ Short-term Memory</h3>
+                                    <span class="badge badge-secondary">Session</span>
+                                </div>
+                                <p class="memory-type-desc">Previous messages, chat history, state. Lives within a user session.</p>
+                                <div class="memory-info">
+                                    <span>Not part of the prompt you can type. Can be:</span>
+                                    <ul>
+                                        <li>Automatically attached by the orchestration layer</li>
+                                        <li>Accessed as a tool (e.g., Scratchpad, Sequential Thinking MCP)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-divider"><span>Long-term Memory Entries</span></div>
+
+                        <div id="memory-list" class="items-list"></div>
+
+                        <div class="add-form collapsed" id="add-memory-form">
+                            <button class="btn btn-outline" onclick="toggleAddForm('add-memory-form')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add Memory Entry
+                            </button>
+                            <div class="add-form-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Memory Type</label>
+                                        <select id="memory-type" class="form-select">
+                                            <option value="semantic">Semantic (Facts, Preferences)</option>
+                                            <option value="episodic">Episodic (Experiences)</option>
+                                            <option value="procedural">Procedural (Instructions)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Content</label>
+                                        <textarea id="memory-content" class="form-textarea" rows="3" placeholder="Memory content..."></textarea>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-sm" onclick="addMemory()">Save Memory</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Knowledge Panel -->
+                <div class="panel" id="panel-knowledge">
+                    <div class="panel-header">
+                        <div class="panel-title-area">
+                            <div class="panel-icon" style="--accent: #3b82f6">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                            </div>
+                            <div>
+                                <h2 class="panel-title">Knowledge</h2>
+                                <p class="panel-desc">Providing strategic context beyond raw task specifications improves LLM autonomy.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="knowledge-categories">
+                            <div class="knowledge-cat-card">
+                                <h4>🌐 External Context</h4>
+                                <ul>
+                                    <li><strong>Domain:</strong> Strategy, business model, market facts</li>
+                                    <li><strong>System:</strong> Overall goals, other agents/services</li>
+                                </ul>
+                            </div>
+                            <div class="knowledge-cat-card">
+                                <h4>📋 Task Context</h4>
+                                <ul>
+                                    <li><strong>Workflow:</strong> Process steps, role guides, hands-off</li>
+                                    <li><strong>Documents:</strong> Specs, procedures, tickets, logs</li>
+                                    <li><strong>Structured Data:</strong> Variables, tables, JSON/XML objects</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="section-divider"><span>Knowledge Base Entries</span></div>
+
+                        <div id="knowledge-list" class="items-list"></div>
+
+                        <div class="add-form collapsed" id="add-knowledge-form">
+                            <button class="btn btn-outline" onclick="toggleAddForm('add-knowledge-form')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add Knowledge Entry
+                            </button>
+                            <div class="add-form-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Category</label>
+                                        <select id="knowledge-category" class="form-select">
+                                            <option value="domain">Domain (Strategy, Business, Market)</option>
+                                            <option value="system">System (Goals, Services)</option>
+                                            <option value="workflow">Workflow (Process Steps)</option>
+                                            <option value="documents">Documents (Specs, Logs)</option>
+                                            <option value="structured_data">Structured Data (JSON, Tables)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Title</label>
+                                        <input type="text" id="knowledge-title" class="form-input" placeholder="Entry title...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Content</label>
+                                        <textarea id="knowledge-content" class="form-textarea" rows="4" placeholder="Knowledge content..."></textarea>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-sm" onclick="addKnowledge()">Save Knowledge</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Examples Panel -->
+                <div class="panel" id="panel-examples">
+                    <div class="panel-header">
+                        <div class="panel-title-area">
+                            <div class="panel-icon" style="--accent: #06d6a0">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            </div>
+                            <div>
+                                <h2 class="panel-title">Examples</h2>
+                                <p class="panel-desc">Negative examples can help address issues identified during error analysis.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="examples-types">
+                            <div class="example-type-card">
+                                <h4>🎯 Behavior Examples</h4>
+                                <div class="example-badges">
+                                    <span class="badge badge-success">✓ Positive</span>
+                                    <span class="badge badge-danger">✗ Negative</span>
+                                </div>
+                            </div>
+                            <div class="example-type-card">
+                                <h4>💬 Response Examples</h4>
+                                <div class="example-badges">
+                                    <span class="badge badge-success">✓ Positive</span>
+                                    <span class="badge badge-danger">✗ Negative</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-divider"><span>Example Entries</span></div>
+
+                        <div id="examples-list" class="items-list"></div>
+
+                        <div class="add-form collapsed" id="add-example-form">
+                            <button class="btn btn-outline" onclick="toggleAddForm('add-example-form')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add Example
+                            </button>
+                            <div class="add-form-body">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label class="form-label">Type</label>
+                                        <select id="example-type" class="form-select">
+                                            <option value="behavior_positive">Behavior - Positive ✓</option>
+                                            <option value="behavior_negative">Behavior - Negative ✗</option>
+                                            <option value="response_positive">Response - Positive ✓</option>
+                                            <option value="response_negative">Response - Negative ✗</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Input</label>
+                                        <textarea id="example-input" class="form-textarea" rows="2" placeholder="Example input..."></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Output</label>
+                                        <textarea id="example-output" class="form-textarea" rows="2" placeholder="Expected output..."></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Description (optional)</label>
+                                        <input type="text" id="example-desc" class="form-input" placeholder="Why this example matters...">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-sm" onclick="addExample()">Save Example</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tool Results Panel -->
+                <div class="panel" id="panel-toolresults">
+                    <div class="panel-header">
+                        <div class="panel-title-area">
+                            <div class="panel-icon" style="--accent: #00d4aa">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                            </div>
+                            <div>
+                                <h2 class="panel-title">Tool Results</h2>
+                                <p class="panel-desc">When an LLM calls a tool, the orchestration layer responds by attaching results to the messages list.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="info-banner">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <span>To call a function, an LLM issues a special format interpreted by the system (it's like saying: "Please call this tool with these parameters"). The orchestration layer then responds with the tool results.</span>
+                        </div>
+                        <div class="tool-results-flow">
+                            <div class="flow-step">
+                                <div class="flow-step-num">1</div>
+                                <div class="flow-step-content">
+                                    <h4>LLM Issues Function Call</h4>
+                                    <p>The model generates a special format requesting a tool call with specific parameters</p>
+                                </div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="flow-step-num">2</div>
+                                <div class="flow-step-content">
+                                    <h4>Orchestration Layer Executes</h4>
+                                    <p>The system intercepts and executes the requested function</p>
+                                </div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="flow-step-num">3</div>
+                                <div class="flow-step-content">
+                                    <h4>Results Attached to Messages</h4>
+                                    <p>Tool output is appended as a special message for the LLM to process</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tool-results-log" class="items-list">
+                            <div class="empty-state">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                                <p>Tool results will appear here during chat interactions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div class="chat-area" id="chatArea">
+                <div class="chat-header">
+                    <h3 class="chat-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Agent Chat
+                    </h3>
+                    <div class="chat-actions">
+                        <button class="btn btn-ghost btn-sm" onclick="clearChat()" title="Clear Chat">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="welcome-message">
+                        <div class="welcome-icon">🤖</div>
+                        <h3>AI Agent Ready</h3>
+                        <p>Configure the 6 context types in the panels above, then start chatting. The agent will use all active context when generating responses.</p>
+                        <div class="welcome-tags">
+                            <span class="welcome-tag" style="--tag-color: #7c5cfc">Instructions</span>
+                            <span class="welcome-tag" style="--tag-color: #ff6b9d">Tools</span>
+                            <span class="welcome-tag" style="--tag-color: #ffa63e">Memory</span>
+                            <span class="welcome-tag" style="--tag-color: #3b82f6">Knowledge</span>
+                            <span class="welcome-tag" style="--tag-color: #06d6a0">Examples</span>
+                            <span class="welcome-tag" style="--tag-color: #00d4aa">Tool Results</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="chat-input-wrapper">
+                        <textarea id="chatInput" class="chat-input" placeholder="Type your message..." rows="1" onkeydown="handleChatKeydown(event)"></textarea>
+                        <button class="btn-send" id="sendBtn" onclick="sendMessage()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                    </div>
+                    <div class="chat-input-info">
+                        <span id="contextInfo">All context types active</span>
+                        <span>Press Enter to send, Shift+Enter for new line</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Context Preview Modal -->
+    <div class="modal-overlay" id="contextModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Full Context Preview</h3>
+                <button class="btn-icon" onclick="closeModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-stats">
+                    <div class="stat-card">
+                        <span class="stat-value" id="modalCharCount">0</span>
+                        <span class="stat-label">Characters</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="modalTokenCount">0</span>
+                        <span class="stat-label">Est. Tokens</span>
+                    </div>
+                </div>
+                <pre class="context-preview-text" id="contextPreviewText"></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
