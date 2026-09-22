@@ -2,9 +2,9 @@ import os
 from typing import List
 
 from langchain_groq import ChatGroq
-from langchain.agents import create_react_agent, AgentExecutor
-from langchain.prompts import ChatPromptTemplate
-from langchain.tools import Tool
+from langchain_classic.agents import create_react_agent, AgentExecutor
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.tools import Tool
 from langchain_community.tools import (
     DuckDuckGoSearchRun as CommunityDuckDuckGoSearchRun,
     DuckDuckGoSearchResults as CommunityDuckDuckGoSearchResults,
@@ -155,8 +155,8 @@ def run_query(query: str) -> None:
 if __name__ == "__main__":
     import sys
 
-    GROQ_API_KEY  = ""
-    os.environ["GROQ_API_KEY"] = GROQ_API_KEY
+    if not os.getenv("GROQ_API_KEY"):
+        raise RuntimeError("Set GROQ_API_KEY before running")
     query = " ".join(sys.argv[1:]).strip() or "Python ML kütüphaneleri nelerdir?"
     run_query(query)
 

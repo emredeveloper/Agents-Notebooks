@@ -1,0 +1,10 @@
+langchain>=1,<2
+langchain-classic>=1,<2
+langchain-core>=1,<2
+langchain-community>=0.4,<1
+langchain-groq>=1,<2
+ddgs>=9.16,<10
+rich>=14,<15
+nest-asyncio>=1.6,<2
+# Notebook tracing cells additionally need arize-phoenix and
+# openinference-instrumentation-langchain.

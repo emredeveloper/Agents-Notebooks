@@ -77,17 +77,12 @@ def google_search(query: str, num_results: int = 5) -> dict:
         A dictionary of search results with titles, URLs, and snippets.
     """
     try:
-        # Using DuckDuckGo Instant Answer API (free, no key needed)
+        # Use the maintained ddgs package when available.
         try:
-            from duckduckgo_search import DDGS
+            from ddgs import DDGS
             use_ddgs = True
         except ImportError:
-            # Try the new package name
-            try:
-                from ddgs import DDGS
-                use_ddgs = True
-            except ImportError:
-                use_ddgs = False
+            use_ddgs = False
         
         if use_ddgs:
             results = []
@@ -722,7 +717,7 @@ def demo_production_tool_calling():
             # Send initial request with spinner
             with console.status(f"[bold green]Asking Gemini...", spinner="dots"):
                 response = client.models.generate_content(
-                    model="gemini-2.0-flash-exp",
+                    model="gemini-flash-latest",
                     contents=query,
                     config=config,
                 )
@@ -809,7 +804,7 @@ def demo_production_tool_calling():
                 # Get next response
                 with console.status("[bold green]Generating response...", spinner="dots"):
                     response = client.models.generate_content(
-                        model="gemini-2.0-flash-exp",
+                        model="gemini-flash-latest",
                         contents=messages,
                         config=config,
                     )
@@ -862,7 +857,7 @@ def interactive_mode():
             # Send request with spinner
             with console.status("[bold green]🤔 Thinking...", spinner="dots"):
                 response = client.models.generate_content(
-                    model="gemini-2.0-flash-exp",
+                    model="gemini-flash-latest",
                     contents=user_input,
                     config=config,
                 )
@@ -943,7 +938,7 @@ def interactive_mode():
                 # Get next response
                 with console.status("[dim]Generating response...", spinner="dots"):
                     response = client.models.generate_content(
-                        model="gemini-2.0-flash-exp",
+                        model="gemini-flash-latest",
                         contents=messages,
                         config=config,
                     )

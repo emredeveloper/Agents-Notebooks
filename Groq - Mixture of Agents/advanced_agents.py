@@ -6,12 +6,12 @@ import math
 
 # LangChain imports
 from langchain_groq import ChatGroq
-from langchain.memory import ConversationBufferMemory
-from langchain.prompts import ChatPromptTemplate
-from langchain.tools import Tool
+from langchain_classic.memory import ConversationBufferMemory
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.tools import Tool
 from langchain_community.tools import DuckDuckGoSearchRun as CommunityDuckDuckGoSearchRun
 from langchain_community.tools import DuckDuckGoSearchResults as CommunityDuckDuckGoSearchResults
-from langchain.agents import create_react_agent, AgentExecutor
+from langchain_classic.agents import create_react_agent, AgentExecutor
 
 # Rich (daha okunabilir çıktı)
 from rich import print as print
@@ -30,8 +30,7 @@ def print_section(title: str):
 def print_panel(text: str, title: Optional[str] = None, style: str = ""): 
     print(Panel.fit(text, title=title, border_style=style or "cyan"))
 
-GROQ_API_KEY  = ""
-os.environ["GROQ_API_KEY"] = GROQ_API_KEY
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # ============================================================================
 # GROQ LIMIT YÖNETİMİ (Free Tier Optimizasyonu)
@@ -745,11 +744,11 @@ def test_imports():
     try:
         # Test LangChain imports
         from langchain_groq import ChatGroq
-        from langchain.memory import ConversationBufferMemory
-        from langchain.prompts import ChatPromptTemplate
-        from langchain.tools import Tool
+        from langchain_classic.memory import ConversationBufferMemory
+        from langchain_core.prompts import ChatPromptTemplate
+        from langchain_core.tools import Tool
         from langchain_community.tools import DuckDuckGoSearchRun as CommunityDuckDuckGoSearchRun
-        from langchain.agents import create_react_agent, AgentExecutor
+        from langchain_classic.agents import create_react_agent, AgentExecutor
         
         print("✅ Tüm LangChain import'ları başarılı!")
         

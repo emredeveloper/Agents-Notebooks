@@ -2,23 +2,24 @@
 # ==========================================
 
 # Whisper & Transformers
-transformers>=4.40.0
-torch>=2.0.0
-accelerate>=0.27.0
+transformers>=5,<6
+torch>=2.14,<3
+accelerate>=1,<2
 
 # Audio processing
-librosa>=0.10.0
-soundfile>=0.12.0
+edge-tts>=7.2.8,<8
+librosa>=0.11,<1
+soundfile>=0.13,<1
 
 # Web search
-duckduckgo-search>=6.0.0
+ddgs>=9.16,<10
 
 # HTTP requests (LM Studio API)
-requests>=2.31.0
+requests>=2.32,<3
 
 # Gradio interface
-gradio>=4.44.0
+gradio>=6.6,<7
 
 # Utilities
-numpy>=1.24.0
-openai>=1.0.0
+numpy>=2,<3
+openai>=3,<4

@@ -18,7 +18,7 @@ import os
 
 # For PDF reading
 try:
-    import PyPDF2
+    from pypdf import PdfReader
     PDF_AVAILABLE = True
 except ImportError:
     PDF_AVAILABLE = False
@@ -33,7 +33,28 @@ except ImportError:
 # Unnecessary imports removed - We are only using Gemini
 
 # Gemini API
-import google.generativeai as genai
+from google import genai
+from google.genai import types
+
+
+class GeminiModel:
+    """Small adapter for the current google-genai client API."""
+
+    def __init__(self, api_key: str, model: str, tools=None, generation_config=None):
+        self.client = genai.Client(api_key=api_key)
+        self.model = model
+        self.tools = tools
+        self.generation_config = generation_config or {}
+
+    def generate_content(self, prompt: str):
+        config = dict(self.generation_config)
+        if self.tools == "code_execution":
+            config["tools"] = [types.Tool(code_execution=types.ToolCodeExecution())]
+        return self.client.models.generate_content(
+            model=self.model,
+            contents=prompt,
+            config=types.GenerateContentConfig(**config) if config else None,
+        )
 
 st.set_page_config(
     page_title="AI Agent Control Panel",
@@ -51,35 +72,35 @@ AGENT_TYPES = {
         "description": "Real web research with Google Search grounding",
         "color": "blue",
         "tools": ["google_search"],
-        "model": "gemini-1.5-flash"
+        "model": "gemini-flash-latest"
     },
     "Data Analysis Agent": {
         "icon": "📊",
         "description": "Data analysis and computation with code execution",
         "color": "green",
         "tools": ["code_execution"],
-        "model": "gemini-1.5-flash"
+        "model": "gemini-flash-latest"
     },
     "Content Writer Agent": {
         "icon": "✍️",
         "description": "SEO-friendly content with structured output",
         "color": "purple",
         "tools": ["structured_output"],
-        "model": "gemini-1.5-flash"
+        "model": "gemini-flash-latest"
     },
     "Document Analysis Agent": {
         "icon": "📄",
         "description": "PDF/DOCX analysis with document understanding",
         "color": "cyan",
         "tools": ["document_understanding"],
-        "model": "gemini-1.5-flash"
+        "model": "gemini-flash-latest"
     },
     "Code Assistant Agent": {
         "icon": "💻",
         "description": "Code writing and testing with code execution",
         "color": "red",
         "tools": ["code_execution"],
-        "model": "gemini-1.5-flash"
+        "model": "gemini-flash-latest"
     }
 }
 
@@ -91,10 +112,10 @@ def extract_text_from_pdf(pdf_file) -> str:
     """Extract text from PDF file"""
     try:
         if PDF_AVAILABLE:
-            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            pdf_reader = PdfReader(pdf_file)
             text = ""
             for page in pdf_reader.pages:
-                text += page.extract_text() + "\n"
+                text += (page.extract_text() or "") + "\n"
             return text
         else:
             return "PDF reading library is not installed."
@@ -187,13 +208,10 @@ Statistics:
 # ============================================================================ 
 
 def research_agent_task(query: str, gemini_key: str, additional_context: str = "") -> Dict:
-    """Research Agent - Gemini 1.5 Flash Lite + Google Search (New SDK)"""
+    """Research Agent - Gemini Flash with Google Search grounding."""
     try:
         # Use new SDK: google.genai
-        from google import genai as new_genai
-        from google.genai import types
-        
-        client = new_genai.Client(api_key=gemini_key)
+        client = genai.Client(api_key=gemini_key)
         
         # Google Search tool
         grounding_tool = types.Tool(
@@ -212,7 +230,7 @@ def research_agent_task(query: str, gemini_key: str, additional_context: str = "
 {ref_text}
 
 RESEARCH REQUIREMENTS:
-✅ Use current sources (2024-2025)
+✅ Use current sources and include publication dates
 ✅ Check multiple reliable sources
 ✅ Add figures and statistics
 ✅ Evaluate different perspectives
@@ -232,7 +250,7 @@ OUTPUT FORMAT (JSON):
 """
         
         response = client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-flash-latest",
             contents=prompt,
             config=config
         )
@@ -308,13 +326,12 @@ OUTPUT FORMAT (JSON):
 # ============================================================================ 
 
 def data_analysis_agent_task(data_description: str, gemini_key: str, data_content: str = "") -> Dict:
-    """Data Analysis Agent - Gemini 1.5 Flash Lite + Code Execution"""
+    """Data Analysis Agent - Gemini Flash with code execution."""
     try:
-        genai.configure(api_key=gemini_key)
-        
         # Create model with code execution tool
-        model = genai.GenerativeModel(
-            'gemini-1.5-flash',
+        model = GeminiModel(
+            gemini_key,
+            'gemini-flash-latest',
             tools='code_execution'
         )
         
@@ -422,10 +439,8 @@ NOTE: Run real Python code and report the results!"""
 # ============================================================================ 
 
 def content_writer_agent_task(topic: str, content_type: str, gemini_key: str, reference_content: str = "") -> Dict:
-    """Content Writer Agent - Gemini 1.5 Flash + Structured Output (Content-Type Specific)"""
+    """Content Writer Agent - Gemini Flash with structured output."""
     try:
-        genai.configure(api_key=gemini_key)
-        
         # Custom settings based on content type
         content_specs = {
             "Article": {
@@ -475,8 +490,9 @@ def content_writer_agent_task(topic: str, content_type: str, gemini_key: str, re
         spec = content_specs.get(content_type, content_specs["Article"])
         
         # Generation config for structured output
-        model = genai.GenerativeModel(
-            'gemini-1.5-flash',
+        model = GeminiModel(
+            gemini_key,
+            'gemini-flash-latest',
             generation_config={
                 "response_mime_type": "application/json",
                 "response_schema": {
@@ -553,10 +569,9 @@ NOTE: Use a {spec['tone']} language suitable for the {content_type} format!"""
 # ============================================================================ 
 
 def document_analysis_agent_task(document_description: str, gemini_key: str, document_content: str = "") -> Dict:
-    """Document Analysis Agent - Gemini 1.5 Flash Lite + Document Understanding"""
+    """Document Analysis Agent - Gemini Flash with document understanding."""
     try:
-        genai.configure(api_key=gemini_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = GeminiModel(gemini_key, 'gemini-flash-latest')
         
         if not document_content:
             return {
@@ -683,13 +698,12 @@ OUTPUT FORMAT (JSON):
 # ============================================================================ 
 
 def code_assistant_agent_task(task_description: str, language: str, gemini_key: str, existing_code: str = "") -> Dict:
-    """Code Assistant Agent - Gemini 1.5 Flash Lite + Code Execution"""
+    """Code Assistant Agent - Gemini Flash with code execution."""
     try:
-        genai.configure(api_key=gemini_key)
-        
         # Model with code execution tool
-        model = genai.GenerativeModel(
-            'gemini-1.5-flash',
+        model = GeminiModel(
+            gemini_key,
+            'gemini-flash-latest',
             tools='code_execution'
         )
         
@@ -1510,7 +1524,7 @@ with col3:
 
 st.markdown("""
 <div style='text-align: center; color: gray; margin-top: 20px;'>
-    <p>🤖 AI Agent Control Panel v5.0 | Gemini 1.5 Flash + Advanced Tools</p>
+    <p>🤖 AI Agent Control Panel v5.0 | Gemini Flash + Advanced Tools</p>
     <p style='font-size: 0.8em;'>✨ Google Search | 🐍 Code Execution | 📋 Structured Output | 📄 Document Understanding</p>
 </div>
 """, unsafe_allow_html=True)

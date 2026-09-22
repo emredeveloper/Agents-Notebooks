@@ -26,8 +26,7 @@ def example_basic_analysis():
     print("Example 1: Basic Video Analysis")
     print("=" * 60)
     
-    # Set API key (or get from environment variable)
-    api_key = "your key"
+    api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
         print("⚠️  OPENROUTER_API_KEY environment variable is not set!")
         return

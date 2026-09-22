@@ -15,10 +15,10 @@ class DateTimeEncoder(json.JSONEncoder):
 
 # Import required packages
 from pymongo import MongoClient
-from langchain.tools import BaseTool
-from langchain.llms.base import LLM
-from langchain.agents import AgentExecutor, create_react_agent
-from langchain.prompts import PromptTemplate
+from langchain_core.tools import BaseTool
+from langchain_core.language_models.llms import LLM
+from langchain_classic.agents import AgentExecutor, create_react_agent
+from langchain_core.prompts import PromptTemplate
 # Removed unused import: LLMResult
 from pydantic import Field
 import requests

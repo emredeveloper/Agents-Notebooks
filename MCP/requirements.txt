@@ -1,0 +1,4 @@
+mcp>=2,<3
+fastmcp>=4,<5
+ollama>=0.6,<1
+python-pptx>=1,<2

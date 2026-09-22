@@ -8,8 +8,8 @@ from google import genai
 from google.genai import types
 import os
 
-# API Key - Paste directly here
-GEMINI_API_KEY = "your_api_key_here"
+# Read the key at runtime; do not store credentials in source files.
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
 # ============================================
 # 1. DATA LOADING AGENT
@@ -562,6 +562,8 @@ class FinalReportAgent:
 # ============================================
 def run_csv_analysis_workflow(csv_file_path: str):
     """Run CSV data analysis workflow"""
+    if not GEMINI_API_KEY:
+        raise RuntimeError("Set GEMINI_API_KEY or GOOGLE_API_KEY before running")
     
     print(f"\n{'='*70}")
     print(f"🚀 COMPREHENSIVE CSV DATA ANALYSIS WORKFLOW STARTING")

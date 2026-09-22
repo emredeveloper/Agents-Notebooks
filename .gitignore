@@ -40,6 +40,7 @@ checkpoints/
 *.ckpt
 
 # ---- Local config / secrets ----
+.env
 .env.local
 .env.*.local
 secret_*.json

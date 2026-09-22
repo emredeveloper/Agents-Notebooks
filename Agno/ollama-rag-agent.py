@@ -19,7 +19,7 @@ from typing import List, Dict, Any, Optional, Union
 from pathlib import Path
 from datetime import datetime
 import hashlib
-import PyPDF2
+from pypdf import PdfReader
 from io import BytesIO
 import requests
 
@@ -268,7 +268,7 @@ class DocumentProcessor:
                 # Read local PDF file
                 pdf_file = open(file_path_or_url, 'rb')
             
-            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            pdf_reader = PdfReader(pdf_file)
             pages = []
             
             for page_num, page in enumerate(pdf_reader.pages, 1):

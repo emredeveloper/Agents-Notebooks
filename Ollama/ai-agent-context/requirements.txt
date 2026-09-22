@@ -1,4 +1,4 @@
-fastapi
-uvicorn[standard]
-httpx
-pydantic
+fastapi>=0.117,<1
+uvicorn[standard]>=0.35,<1
+httpx>=0.28,<1
+pydantic>=2,<3

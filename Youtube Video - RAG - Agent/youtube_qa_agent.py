@@ -9,15 +9,14 @@ from typing import List, Dict, Any, Optional, TypedDict
 from urllib.parse import urlparse, parse_qs
 
 from youtube_transcript_api import YouTubeTranscriptApi
-from pytube import YouTube
+import yt_dlp
 import tiktoken
 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain.embeddings.base import Embeddings
+from langchain_core.embeddings import Embeddings
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
-import google.generativeai as genai
 
 from langgraph.graph import StateGraph, END
 
@@ -128,19 +127,18 @@ class YouTubeQAAgent:
             print(f"🤖 Model: {model_name}")
             
             # Gemini API key'i ayarla
-            genai.configure(api_key=api_key)
-            os.environ["GOOGLE_API_KEY"] = api_key
-            
             # Gemini LLM
             self.llm = ChatGoogleGenerativeAI(
-                model=model_name if model_name.startswith("gemini") else "gemini-2.5-flash",
+                model=model_name if model_name.startswith("gemini") else "gemini-flash-latest",
+                google_api_key=api_key,
                 temperature=0.1,
                 max_tokens=2000
             )
             
             # Gemini embeddings
             self.embeddings = GoogleGenerativeAIEmbeddings(
-                model="models/embedding-001"
+                model="gemini-embedding-001",
+                google_api_key=api_key,
             )
             print("✅ Gemini LLM ve embeddings yapılandırıldı")
             
@@ -190,12 +188,12 @@ class YouTubeQAAgent:
             
             # Video başlığını al - farklı yöntemler dene
             try:
-                # İlk yöntem: pytube
-                yt = YouTube(state["video_url"])
-                state["video_title"] = yt.title
-                print(f"✅ Video bulundu (pytube): {state['video_title']}")
+                with yt_dlp.YoutubeDL({"quiet": True, "no_warnings": True, "skip_download": True, "noplaylist": True}) as ydl:
+                    info = ydl.extract_info(state["video_url"], download=False)
+                state["video_title"] = info.get("title") or f"YouTube Video ({video_id})"
+                print(f"✅ Video bulundu: {state['video_title']}")
             except Exception as e1:
-                print(f"⚠️ Pytube hatası: {e1}")
+                print(f"⚠️ Video bilgisi alınamadı: {e1}")
                 # Son çare: sadece video ID
                 state["video_title"] = f"YouTube Video ({video_id})"
                 print(f"⚠️ Video ID kullanılıyor: {state['video_title']}")

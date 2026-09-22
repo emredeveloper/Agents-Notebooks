@@ -86,7 +86,7 @@ def check_python_packages():
     """Check Python package requirements"""
     console.print("\n🐍 Checking Python packages...", style="bold blue")
     
-    packages = ["agno", "rich", "pydantic", "PyPDF2", "requests"]
+    packages = ["agno", "rich", "pydantic", "pypdf", "requests"]
     
     missing = []
     

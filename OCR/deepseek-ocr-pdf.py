@@ -1,6 +1,6 @@
 import sys
 import os
-import fitz  # PyMuPDF
+import pymupdf as fitz
 from ollama import chat
 import re
 from PIL import Image, ImageDraw, ImageFont

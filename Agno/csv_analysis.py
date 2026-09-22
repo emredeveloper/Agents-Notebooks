@@ -141,7 +141,7 @@ class CsvAnalysisReport(BaseModel):
 # --------------------------------------
 
 def build_agent() -> Agent:
-    api_key = "sk-or-v1-"
+    api_key = os.getenv("OPENROUTER_API_KEY")
     model_id = "x-ai/grok-4-fast:free"
     if not api_key:
         raise RuntimeError("OPENROUTER_API_KEY bulunamadı. .env veya ortam değişkeni olarak ekleyin.")

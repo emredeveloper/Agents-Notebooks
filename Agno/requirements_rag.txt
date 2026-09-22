@@ -1,19 +1,20 @@
 # Advanced Ollama RAG Agent with Ollama Embeddings
 
 # Core Agno framework
-agno>=0.1.0
+agno>=3,<4
+ollama>=0.6,<1
 
 # Rich terminal interface
-rich>=13.0.0
+rich>=14,<15
 
 # Data validation and settings management
-pydantic>=2.0.0
+pydantic>=2,<3
 
 # PDF processing
-PyPDF2>=3.0.0
+pypdf>=6,<7
 
 # HTTP requests for URL downloads
-requests>=2.31.0
+requests>=2.32,<3
 
 # Math operations for similarity calculations
 # (usually included in Python standard library)
@@ -22,9 +23,6 @@ requests>=2.31.0
 # Make sure these models are pulled:
 # ollama pull llama3.2:3b           # For chat
 # ollama pull embeddinggemma:latest # For embeddings
-
-# Optional: Better PDF processing
-# pypdf>=3.0.0
 
 # Optional: For advanced text processing
 # nltk>=3.8

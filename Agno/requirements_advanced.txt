@@ -1,13 +1,14 @@
 # Advanced Ollama Agent Requirements
 
 # Core Agno framework
-agno
+agno>=3,<4
+ollama>=0.6,<1
 
 # Rich terminal interface
-rich
+rich>=14,<15
 
 # Data validation and settings management
-pydantic
+pydantic>=2,<3
 
 # Additional dependencies (eğer gerekirse)
 # SQLite support (Python built-in)

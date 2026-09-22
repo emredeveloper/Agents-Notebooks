@@ -18,7 +18,7 @@ except ImportError:
 
 
 API_URL = "https://ollama.com/api/web_search"
-API_KEY = "api_key"  # set via env var in production
+API_KEY = os.getenv("OLLAMA_API_KEY")
 
 if not API_KEY:
     print("Error: OLLAMA_API_KEY environment variable is not set.", file=sys.stderr)
